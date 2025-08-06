@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "npm run build && ./scripts/deploy-to-s3.sh",
+    "deploy:prod": "NODE_ENV=production npm run build && S3_BUCKET=serenade-prod-website ./scripts/deploy-to-s3.sh"
   },
   "dependencies": {
     "lucide-react": "^0.525.0",
