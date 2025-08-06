@@ -58,26 +58,49 @@ jobs:
           echo "📦 Creating backup..."
           aws s3 sync "s3://${{ env.S3_BUCKET }}" "s3://${{ env.S3_BUCKET }}-backup-$TIMESTAMP" --quiet || echo "⚠️ Backup failed or no existing files"
           
-          # 파일 업로드
-          echo "📤 Uploading files..."
-          aws s3 sync out/ "s3://${{ env.S3_BUCKET }}" \
-            --delete \
-            --exclude "*.DS_Store" \
-            --cache-control "public, max-age=31536000, immutable" \
-            --metadata-directive REPLACE
+          # 기존 파일 삭제 (clean deploy)
+          echo "🧹 Cleaning existing files..."
+          aws s3 rm "s3://${{ env.S3_BUCKET }}" --recursive --exclude "backup-*"
           
-          # HTML 파일 캐시 설정
-          echo "🔧 Setting HTML cache headers..."
-          aws s3 cp "s3://${{ env.S3_BUCKET }}" "s3://${{ env.S3_BUCKET }}" \
-            --recursive \
-            --exclude "*" \
-            --include "*.html" \
-            --cache-control "public, max-age=300" \
-            --metadata-directive REPLACE
+          # HTML 파일을 먼저 올리고 Content-Type 명시적 설정
+          echo "📤 Uploading HTML files with correct Content-Type..."
+          find out/ -name "*.html" -type f | while read file; do
+            key="${file#out/}"
+            aws s3 cp "$file" "s3://${{ env.S3_BUCKET }}/$key" \
+              --content-type "text/html; charset=utf-8" \
+              --cache-control "public, max-age=300"
+          done
+          
+          # CSS 파일 업로드
+          echo "📤 Uploading CSS files..."
+          find out/ -name "*.css" -type f | while read file; do
+            key="${file#out/}"
+            aws s3 cp "$file" "s3://${{ env.S3_BUCKET }}/$key" \
+              --content-type "text/css" \
+              --cache-control "public, max-age=31536000, immutable"
+          done
+          
+          # JS 파일 업로드
+          echo "📤 Uploading JS files..."
+          find out/ -name "*.js" -type f | while read file; do
+            key="${file#out/}"
+            aws s3 cp "$file" "s3://${{ env.S3_BUCKET }}/$key" \
+              --content-type "application/javascript" \
+              --cache-control "public, max-age=31536000, immutable"
+          done
+          
+          # 나머지 파일들 업로드
+          echo "📤 Uploading remaining files..."
+          aws s3 sync out/ "s3://${{ env.S3_BUCKET }}" \
+            --exclude "*.html" \
+            --exclude "*.css" \
+            --exclude "*.js" \
+            --exclude "*.DS_Store" \
+            --cache-control "public, max-age=31536000, immutable"
           
           echo "✅ Deployment completed successfully!"
 
-      - name: Invalidate CloudFront (Optional)
+      - name: Invalidate CloudFront
         if: vars.CLOUDFRONT_DISTRIBUTION_ID != ''
         run: |
           echo "🔄 Invalidating CloudFront cache..."
@@ -91,6 +114,10 @@ jobs:
           echo "🎉 Deployment Summary"
           echo "- S3 Bucket: ${{ env.S3_BUCKET }}"
           echo "- Region: ${{ env.AWS_REGION }}"
-          echo "- Website URL: https://${{ env.S3_BUCKET }}.s3.${{ env.AWS_REGION }}.amazonaws.com/index.html"
+          echo "- S3 Website URL: http://${{ env.S3_BUCKET }}.s3-website.${{ env.AWS_REGION }}.amazonaws.com"
+          if [ "${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}" != "" ]; then
+            echo "- CloudFront URL: https://dfypw9frskrft.cloudfront.net"
+            echo "- Custom Domain: https://serenade-wedding.com"
+          fi
           echo "- Commit: ${{ github.sha }}"
           echo "- Branch: ${{ github.ref_name }}"
