@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
 export function Features() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const progressRef = useRef(0);
 
   const features = [
     {
@@ -40,20 +42,46 @@ export function Features() {
     // },
   ];
 
-  // Auto slide every 5 seconds
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % features.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [features.length]);
+  const SLIDE_DURATION = 5000; // 5초
+  const PROGRESS_INTERVAL = 100; // 100ms마다 업데이트
 
+  // Progress bar animation
+  useEffect(() => {
+    const progressTimer = setInterval(() => {
+      progressRef.current += (PROGRESS_INTERVAL / SLIDE_DURATION) * 100;
+
+      if (progressRef.current >= 100) {
+        // 다음 슬라이드로 이동
+        setCurrentSlide((prevSlide) => (prevSlide + 1) % features.length);
+        progressRef.current = 0;
+        setProgress(0);
+      } else {
+        setProgress(progressRef.current);
+      }
+    }, PROGRESS_INTERVAL);
+
+    return () => {
+      clearInterval(progressTimer);
+    };
+  }, [currentSlide, features.length]); // currentSlide를 의존성에 추가
+
+  // currentSlide가 변경될 때마다 progress 리셋
+  useEffect(() => {
+    progressRef.current = 0;
+    setProgress(0);
+  }, [currentSlide]);
+
+  // 수동으로 슬라이드 변경
   const goToPrevious = () => {
     setCurrentSlide((prev) => (prev === 0 ? features.length - 1 : prev - 1));
   };
 
   const goToNext = () => {
     setCurrentSlide((prev) => (prev + 1) % features.length);
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
   };
 
   return (
@@ -77,28 +105,22 @@ export function Features() {
             </div>
 
             {/* Navigation Controls */}
-            <div className="flex items-center space-x-8">
-              {/* Dots */}
-              <div className="flex space-x-2">
-                {features.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentSlide(index)}
-                    className={`transition-all duration-300 ${
-                      currentSlide === index
-                        ? "w-8 h-2 bg-[#FB6541] rounded-full"
-                        : "w-2 h-2 bg-gray-300 rounded-full hover:bg-gray-400"
-                    }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
-                ))}
+            <div className="flex items-center space-x-8 mt-30">
+              {/* Single Progress Bar */}
+              <div className="relative w-120 h-1 bg-gray-200 rounded-full overflow-hidden">
+                <div
+                  className="absolute top-0 left-0 h-full bg-[#FB6541] rounded-full transition-all duration-100 ease-linear"
+                  style={{
+                    width: `${progress}%`,
+                  }}
+                />
               </div>
 
               {/* Arrow buttons with Counter in between */}
               <div className="flex items-center space-x-3">
                 <button
                   onClick={goToPrevious}
-                  className="w-10 h-10 rounded-full border border-gray-300 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 flex items-center justify-center group"
+                  className="w-10 h-10 flex items-center justify-center group"
                   aria-label="Previous slide"
                 >
                   <svg
@@ -117,8 +139,8 @@ export function Features() {
                 </button>
 
                 {/* Counter between arrows */}
-                <div className="text-sm text-gray-500 font-medium min-w-[40px] text-center">
-                  <span className="text-gray-900 font-semibold">
+                <div className="text-xl text-[#A2A2A2] min-w-[40px] text-center">
+                  <span className="text-gray-900 font-bold">
                     {currentSlide + 1}
                   </span>
                   <span className="mx-1">/</span>
@@ -127,7 +149,7 @@ export function Features() {
 
                 <button
                   onClick={goToNext}
-                  className="w-10 h-10 rounded-full border border-gray-300 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 flex items-center justify-center group"
+                  className="w-10 h-10 flex items-center justify-center group"
                   aria-label="Next slide"
                 >
                   <svg
