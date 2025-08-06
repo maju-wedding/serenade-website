@@ -13,17 +13,18 @@ export function Hero() {
       <div className="absolute z-10 left-60">
         <div className="max-w-4xl mx-auto">
           <div className="space-y-4 mb-12">
-            <h2 className="text-2xl md:text-4xl font-medium">
+            <h2 className="text-4xl md:text-5xl font-medium leading-12 md:leading-15">
               가장 우리다운 결혼 준비
+              <br />
+              광고 없는 진짜 웨딩앱
             </h2>
-            <p className="text-xl md:text-4xl">광고 없는 진짜 웨딩앱</p>
           </div>
 
           <a
             href="https://apps.apple.com/kr/app/%EC%84%B8%EB%A0%88%EB%82%98%EB%8D%B0-%EA%B4%91%EA%B3%A0-%EC%97%86%EB%8A%94-%EC%A7%84%EC%A7%9C-%EC%9B%A8%EB%94%A9-%EC%95%B1/id6747605861"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-black w-fit text-white px-6 py-4 rounded-4xl text-lg font-medium flex items-center space-x-2"
+            className="bg-black w-fit text-white px-6 py-4 rounded-4xl text-lg font-medium flex items-center space-x-2 hover:bg-[#FB6541] transition-colors duration-300"
           >
             {/* iOS App Store Icon */}
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">

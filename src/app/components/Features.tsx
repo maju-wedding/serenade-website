@@ -57,13 +57,13 @@ export function Features() {
   };
 
   return (
-    <section className="relative bg-white py-30 px-4 md:px-8 lg:px-20 overflow-hidden">
+    <section className="relative bg-white py-30 px-4 md:px-8 lg:px-20 overflow-hidden min-h-screen flex items-center">
       <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center ">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-60 items-center">
           {/* Left side - Content */}
           <div className="space-y-10 order-1">
             <div className="space-y-6">
-              <span className="inline-block text-orange-500 font-semibold text-sm uppercase tracking-wider">
+              <span className="inline-block text-[#FB6541] font-bold text-3xl uppercase ">
                 {features[currentSlide].subtitle}
               </span>
 
@@ -86,7 +86,7 @@ export function Features() {
                     onClick={() => setCurrentSlide(index)}
                     className={`transition-all duration-300 ${
                       currentSlide === index
-                        ? "w-8 h-2 bg-orange-500 rounded-full"
+                        ? "w-8 h-2 bg-[#FB6541] rounded-full"
                         : "w-2 h-2 bg-gray-300 rounded-full hover:bg-gray-400"
                     }`}
                     aria-label={`Go to slide ${index + 1}`}
@@ -152,7 +152,7 @@ export function Features() {
           <div className="flex justify-center order-2">
             <div className="relative w-full">
               {/* Image Container with Transition */}
-              <div className="relative aspect-[3/4] overflow-hidden">
+              <div className="relative aspect-[3/4] overflow-hidden min-w-140">
                 {features.map((feature, index) => (
                   <div
                     key={index}

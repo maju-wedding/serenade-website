@@ -7,9 +7,9 @@ export function BrandStory() {
     <section id="brand-story" className=" bg-white">
       <div className="w-full">
         {/* Brand Story with black background */}
-        <div className="bg-[#161616] relative h-120 flex justify-center items-center">
+        <div className="bg-[#161616] relative h-140 flex justify-center items-center">
           {/* Left side - Image */}
-          <div className="absolute h-96 w-76 left-20 top-[-110]">
+          <div className="absolute h-96 w-76 left-40 top-[-110]">
             <Image
               src="/images/brandstory1.png"
               alt="Couple Image"
@@ -48,7 +48,7 @@ export function BrandStory() {
           </div>
 
           {/* Right side - Workshop image */}
-          <div className="absolute right-20 bottom-0">
+          <div className="absolute right-40 bottom-0">
             <div className="w-64 h-80">
               <Image
                 src="/images/brandstory2.png"

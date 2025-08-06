@@ -5,13 +5,13 @@ export function Footer() {
     <footer className="bg-black text-white">
       {/* Main footer content with background image */}
       <div
-        className="relative w-full h-96 bg-cover bg-center bg-no-repeat"
+        className="relative w-full h-120 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: "url(/images/footer.png)",
         }}
       >
         {/* Content overlay */}
-        <div className="relative z-10 container mx-auto px-6 h-full flex items-center justify-center pl-164">
+        <div className="relative z-10 container mx-auto px-6 h-full flex items-center justify-center pl-200">
           <div className="text-left">
             <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight">
               결혼 준비의 시작,
