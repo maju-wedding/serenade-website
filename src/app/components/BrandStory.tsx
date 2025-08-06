@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 export function BrandStory() {
   return (
     <section id="brand-story" className=" bg-white">
@@ -8,10 +10,12 @@ export function BrandStory() {
         <div className="bg-[#161616] relative h-120 flex justify-center items-center">
           {/* Left side - Image */}
           <div className="absolute h-96 w-76 left-20 top-[-110]">
-            <img
+            <Image
               src="/images/brandstory1.png"
               alt="Couple Image"
               className="absolute w-full h-full object-cover grayscale-100"
+              width={304}
+              height={384}
             />
           </div>
 
@@ -32,8 +36,8 @@ export function BrandStory() {
                 정보는 넘쳤지만, 진짜 필요한 건 찾기 어려웠고 점점 지쳐갔죠.
               </p>
               <p>
-                그래서 생각했어요. "조금 더 나은 방식으로 결혼을 준비할 순
-                없을까?"
+                그래서 생각했어요. &rdquo;조금 더 나은 방식으로 결혼을 준비할 순
+                없을까?&rdquo;
               </p>
               <p>그 질문에서 출발해, 경험을 바탕으로 꼭 필요한 기능만을 담아</p>
               <p>
@@ -46,10 +50,12 @@ export function BrandStory() {
           {/* Right side - Workshop image */}
           <div className="absolute right-20 bottom-0">
             <div className="w-64 h-80">
-              <img
+              <Image
                 src="/images/brandstory2.png"
                 alt="Workshop Image"
                 className="w-full h-full object-cover grayscale-100"
+                width={256}
+                height={320}
               />
             </div>
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 export function Features() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -159,10 +160,12 @@ export function Features() {
                       currentSlide === index ? "opacity-100" : "opacity-0"
                     }`}
                   >
-                    <img
+                    <Image
                       src={feature.appScreen}
                       alt={feature.appAlt}
                       className="w-full h-full object-contain"
+                      width={400}
+                      height={500}
                     />
                   </div>
                 ))}
