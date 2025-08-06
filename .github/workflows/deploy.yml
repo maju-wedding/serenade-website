@@ -101,11 +101,11 @@ jobs:
           echo "✅ Deployment completed successfully!"
 
       - name: Invalidate CloudFront
-        if: vars.CLOUDFRONT_DISTRIBUTION_ID != ''
+        if: env.CLOUDFRONT_DISTRIBUTION_ID != ''
         run: |
           echo "🔄 Invalidating CloudFront cache..."
           aws cloudfront create-invalidation \
-            --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} \
             --paths "/*"
           echo "✅ CloudFront invalidation initiated"
 
