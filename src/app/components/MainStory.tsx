@@ -77,7 +77,6 @@ export function MainStory() {
         opacity: 1,
         transform: `scale(1.1) translateY(-3px)`,
         color: `rgb(0, 0, 0)`,
-        filter: `blur(0px)`,
         transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
         transformOrigin: "center",
       };
@@ -85,9 +84,8 @@ export function MainStory() {
       // 이미 지나간 라인 스타일
       return {
         opacity: 0.4,
-        transform: `scale(0.98)`,
+        transform: `scale(0.9)`,
         color: `rgb(156, 163, 175)`, // gray-400
-        filter: `blur(0.8px)`,
         transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
         transformOrigin: "center",
       };
@@ -95,9 +93,8 @@ export function MainStory() {
       // 아직 활성화되지 않은 라인 스타일
       return {
         opacity: 0.3,
-        transform: `scale(1)`,
+        transform: `scale(0.9)`,
         color: `rgb(156, 163, 175)`, // gray-400
-        filter: `blur(0.5px)`,
         transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
         transformOrigin: "center",
       };
@@ -121,11 +118,11 @@ export function MainStory() {
       <div className="sticky top-0 h-screen flex items-center justify-center bg-white">
         <div className="container mx-auto px-6">
           <div className="text-center">
-            <div className="max-w-4xl mx-auto space-y-4 md:space-y-6">
+            <div className="max-w-4xl mx-auto space-y-4">
               {lines.map((line, index) => (
                 <p
                   key={index}
-                  className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight"
+                  className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight"
                   style={getLineStyle(index)}
                 >
                   {line}
@@ -133,14 +130,6 @@ export function MainStory() {
               ))}
             </div>
           </div>
-
-          {/* 디버그 정보 (개발 중에만 표시, 나중에 제거) */}
-          {process.env.NODE_ENV === "development" && (
-            <div className="absolute top-4 left-4 text-xs text-gray-500 bg-white/80 p-2 rounded">
-              <div>Active Line: {activeLineIndex + 1}</div>
-              <div>In View: {isInView ? "Yes" : "No"}</div>
-            </div>
-          )}
         </div>
       </div>
     </section>
