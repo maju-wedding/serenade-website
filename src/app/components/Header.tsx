@@ -33,7 +33,7 @@ export function Header() {
     >
       <div className="w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between py-2.5">
+          <div className="flex items-center justify-between py-2">
             {/* Logo */}
             <div className="flex items-center">
               <button
@@ -55,7 +55,13 @@ export function Header() {
             </div>
 
             {/* Desktop: App Download Button */}
-            <div className="hidden md:flex items-center">
+            <div
+              className={`hidden md:flex items-center transition-opacity duration-300 ${
+                isScrolled
+                  ? "opacity-100 pointer-events-auto"
+                  : "opacity-0 pointer-events-none"
+              }`}
+            >
               <a
                 href="https://apps.apple.com/kr/app/%EC%84%B8%EB%A0%88%EB%82%98%EB%8D%B0-%EA%B4%91%EA%B3%A0-%EC%97%86%EB%8A%94-%EC%A7%84%EC%A7%9C-%EC%9B%A8%EB%94%A9-%EC%95%B1/id6747605861"
                 target="_blank"

@@ -113,7 +113,7 @@ export function MainStory() {
       ref={sectionRef}
       id="main-story"
       className="relative bg-white"
-      style={{ height: "300vh" }} // 충분한 스크롤 공간 확보
+      style={{ height: "200vh" }} // 충분한 스크롤 공간 확보
     >
       <div className="sticky top-0 h-screen flex items-center justify-center bg-white">
         <div className="container mx-auto px-6">
@@ -122,7 +122,7 @@ export function MainStory() {
               {lines.map((line, index) => (
                 <p
                   key={index}
-                  className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight"
+                  className="text-4xl font-bold leading-tight"
                   style={getLineStyle(index)}
                 >
                   {line}

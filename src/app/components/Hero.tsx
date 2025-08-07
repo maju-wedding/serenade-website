@@ -4,7 +4,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen lg:h-[728px] flex items-center"
+      className="relative h-[540px] sm:h-[730px] flex items-center"
     >
       {/* 배경 이미지 */}
       <div
@@ -15,25 +15,25 @@ export function Hero() {
       ></div>
 
       {/* 콘텐츠 영역 */}
-      <div className="relative z-10 w-full">
+      <div className="relative z-10 w-full pt-40 sm:pt-60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
+          <div className="flex flex-col items-center">
             {/* 제목 */}
-            <div className="space-y-4 mb-8 sm:mb-10 lg:mb-12">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium leading-tight text-white">
+            <div className="space-y-4 mb-12">
+              <h2 className="text-5xl font-medium leading-tight text-white text-center">
                 <span className="block mb-2">가장 우리다운 결혼 준비</span>
                 <span className="block">광고 없는 진짜 웨딩앱</span>
               </h2>
             </div>
 
             {/* CTA 버튼 */}
-            <div className="flex flex-col sm:flex-row gap-4 items-center">
+            <div className="flex flex-col sm:flex-row items-center">
               {/* iOS 앱 다운로드 버튼 */}
               <a
                 href="https://apps.apple.com/kr/app/%EC%84%B8%EB%A0%88%EB%82%98%EB%8D%B0-%EA%B4%91%EA%B3%A0-%EC%97%86%EB%8A%94-%EC%A7%84%EC%A7%9C-%EC%9B%A8%EB%94%A9-%EC%95%B1/id6747605861"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-black text-white px-5 sm:px-6 py-3 sm:py-4 rounded-full text-base sm:text-lg font-medium flex items-center justify-center space-x-2 hover:bg-[#FB6541] transition-all duration-300 transform hover:scale-105 w-full sm:w-auto max-w-xs"
+                className="bg-white text-black px-5 sm:px-6 py-3 sm:py-4 rounded-full text-base sm:text-lg font-medium flex items-center justify-center space-x-2 hover:bg-[#FB6541] transition-all duration-300 transform hover:scale-105 w-full sm:w-auto max-w-xs hover:text-white"
               >
                 {/* iOS App Store Icon */}
                 <svg
@@ -62,23 +62,6 @@ export function Hero() {
             {/*</div>*/}
           </div>
         </div>
-      </div>
-
-      {/* 스크롤 인디케이터 (모바일에서는 숨김) */}
-      <div className="hidden sm:block absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <svg
-          className="w-6 h-6 text-white/60"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 14l-7 7m0 0l-7-7m7 7V3"
-          />
-        </svg>
       </div>
     </section>
   );

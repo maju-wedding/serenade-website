@@ -5,13 +5,13 @@ import Image from "next/image";
 
 export function Features() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const progressRef = useRef(0);
+  const progressRef = useRef<number>(0);
+  const progressBarRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   const features = [
     {
-      title: "결혼 준비에 필요한\n모든 가이드.zip",
+      title: "결혼 준비, 어디서부터\n시작할지 막막하다면?",
       subtitle: "웨딩 가이드",
       description:
         "순서대로 짚어주는 웨딩 가이드로\n혼자서도 차근차근 준비할 수 있어요.",
@@ -19,17 +19,33 @@ export function Features() {
       appAlt: "웨딩 가이드 서비스",
     },
     {
-      title: "넘쳐나는 정보, 핵심만\n빠르게 AI 리뷰 요약",
+      title: "넘쳐나는 정보 속\n핵심만 쏙쏙!",
       subtitle: "AI 리뷰 요약",
       description:
-        "수많은 리뷰 속에서 AI가 핵심만 쏙쏙\n골라서 한눈에 볼 수 있게 정리해드려요.",
+        "긴 글은 AI가 빠르게 요약해줘서\n중요한 내용만 골라볼 수 있어요.",
       appScreen: "/images/service2.png",
       appAlt: "AI 리뷰 분석 서비스",
     },
+    {
+      title: "놓치기 쉬운\n준비 항목도 꼼꼼하게!",
+      subtitle: "체크리스트",
+      description:
+        "할 일을 하나하나 지우며\n결혼 준비의 진짜 진척을 느껴보세요.",
+      appScreen: "/images/service3.png",
+      appAlt: "체크리스트 서비스",
+    },
+    {
+      title: "예산 초과 없이\n똑똑하게!",
+      subtitle: "예산관리",
+      description:
+        "지출 내역을 항목별로 입력하고\n남은 예산도 한눈에 확인할 수 있어요.",
+      appScreen: "/images/service4.png",
+      appAlt: "예산 관리 서비스",
+    },
   ];
 
-  const SLIDE_DURATION = 5000;
-  const PROGRESS_INTERVAL = 100;
+  const SLIDE_DURATION = 3000;
+  const PROGRESS_INTERVAL = 10;
 
   // 화면 크기 감지
   useEffect(() => {
@@ -46,15 +62,23 @@ export function Features() {
   useEffect(() => {
     if (isMobile) return; // 모바일에서는 슬라이드 비활성화
 
+    progressRef.current = 0;
+    // DOM 직접 조작으로 progress bar 초기화
+    if (progressBarRef.current) {
+      progressBarRef.current.style.width = "0%";
+    }
+
     const progressTimer = setInterval(() => {
       progressRef.current += (PROGRESS_INTERVAL / SLIDE_DURATION) * 100;
 
       if (progressRef.current >= 100) {
         setCurrentSlide((prevSlide) => (prevSlide + 1) % features.length);
         progressRef.current = 0;
-        setProgress(0);
       } else {
-        setProgress(progressRef.current);
+        // DOM 직접 조작으로 progress bar 업데이트 (리렌더링 없음)
+        if (progressBarRef.current) {
+          progressBarRef.current.style.width = `${progressRef.current}%`;
+        }
       }
     }, PROGRESS_INTERVAL);
 
@@ -62,11 +86,6 @@ export function Features() {
       clearInterval(progressTimer);
     };
   }, [currentSlide, features.length, isMobile]);
-
-  useEffect(() => {
-    progressRef.current = 0;
-    setProgress(0);
-  }, [currentSlide]);
 
   const goToPrevious = () => {
     setCurrentSlide((prev) => (prev === 0 ? features.length - 1 : prev - 1));
@@ -118,9 +137,9 @@ export function Features() {
 
   // 데스크톱 버전 - 슬라이드 형태
   const DesktopVersion = () => (
-    <div className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-center">
+    <div className="flex justify-between items-center min-h-screen">
       {/* Left side - Content */}
-      <div className="text-left">
+      <div className="text-left flex-shrink-0 w-1/2">
         <div className="space-y-6">
           <span className="inline-block text-[#FB6541] font-bold text-2xl uppercase">
             {features[currentSlide].subtitle}
@@ -140,10 +159,9 @@ export function Features() {
           {/* Progress Bar */}
           <div className="relative w-60 h-1 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="absolute top-0 left-0 h-full bg-[#FB6541] rounded-full transition-all duration-100 ease-linear"
-              style={{
-                width: `${progress}%`,
-              }}
+              ref={progressBarRef}
+              className="absolute top-0 left-0 h-full bg-[#FB6541] rounded-full transition-none"
+              style={{ width: "0%" }}
             />
           </div>
 
@@ -151,7 +169,7 @@ export function Features() {
           <div className="flex items-center space-x-3">
             <button
               onClick={goToPrevious}
-              className="w-12 h-12 flex items-center justify-center rounded-full border border-gray-300 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 group"
+              className="w-12 h-12 flex items-center justify-center cursor-pointer rounded-full border border-gray-300 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 group"
               aria-label="Previous slide"
             >
               <svg
@@ -179,7 +197,7 @@ export function Features() {
 
             <button
               onClick={goToNext}
-              className="w-12 h-12 flex items-center justify-center rounded-full border border-gray-300 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 group"
+              className="w-12 h-12 flex items-center justify-center cursor-pointer rounded-full border border-gray-300 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 group"
               aria-label="Next slide"
             >
               <svg
@@ -201,7 +219,7 @@ export function Features() {
       </div>
 
       {/* Right side - Service Image */}
-      <div className="flex justify-center">
+      <div className="flex justify-center flex-shrink-0 w-85">
         <div className="relative w-full max-w-none">
           <div className="relative aspect-[9/20] max-h-[800px] mx-auto">
             {features.map((feature, index) => (

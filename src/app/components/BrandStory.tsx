@@ -46,18 +46,18 @@ export function BrandStory() {
     <section ref={sectionRef} id="brand-story" className="bg-white">
       <div className="w-full">
         {/* Brand Story with black background */}
-        <div className="bg-[#161616] relative  lg:h-[560px] py-12 sm:py-16 lg:py-0">
+        <div className="bg-[#161616] relative lg:h-[480px] py-12 sm:py-16 lg:py-0">
           {/* Container */}
           <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
             {/* Flex container - 모바일: 세로, 데스크톱: 가로 */}
-            <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-between h-full gap-8 lg:gap-12">
+            <div className="flex flex-col lg:flex-row items-center justify-center h-full">
               {/* 모바일에서 보이는 상단 이미지 (데스크톱에서는 숨김) */}
               <div className="lg:hidden w-full max-w-md mx-auto">
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <Image
                     src="/images/brandstory1.png"
                     alt="Couple Image"
-                    className="w-full h-full object-cover grayscale"
+                    className="w-full h-full object-contain grayscale"
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
@@ -65,12 +65,12 @@ export function BrandStory() {
               </div>
 
               {/* 데스크톱 왼쪽 이미지 (모바일에서는 숨김) */}
-              <div className="hidden lg:block sm:flex-shrink-0">
-                <div className="relative w-52 lg:w-64 xl:w-76 h-96 xl:h-105 -translate-y-50">
+              <div className="hidden lg:block sm:flex-shrink-0 ">
+                <div className="relative w-76 h-106 -translate-y-50">
                   <Image
                     src="/images/brandstory1.png"
                     alt="Couple Image"
-                    className="w-full h-full object-cover grayscale"
+                    className="w-full h-full object-contain grayscale"
                     width={304}
                     height={420}
                   />
@@ -78,9 +78,9 @@ export function BrandStory() {
               </div>
 
               {/* 중앙 텍스트 콘텐츠 */}
-              <div className="flex flex-col justify-center text-center md:text-left">
+              <div className="flex flex-col justify-center text-left mx-35">
                 <h3
-                  className="text-white text-lg sm:text-xl md:text-2xl font-normal mb-6 sm:mb-8 lg:mb-10 font-poppins"
+                  className="text-white text-sm sm:text-base md:text-lg font-medium mb-6 sm:mb-8 lg:mb-10 font-poppins"
                   style={{
                     fontFamily: "var(--font-poppins), Poppins, sans-serif",
                     opacity: isVisible ? 1 : 0,
@@ -94,7 +94,7 @@ export function BrandStory() {
                   className="text-white/70 font-normal"
                   style={getAnimationStyle()}
                 >
-                  <span className="text-sm sm:text-base md:text-lg">
+                  <span className="text-sm sm:text-base md:text-lg leading-8">
                     세레나데는, 저희 부부의 수많은 고민과 시행착오에서
                     시작됐습니다.
                     <br />
@@ -112,12 +112,12 @@ export function BrandStory() {
               </div>
 
               {/* 오른쪽/하단 이미지 */}
-              <div className="w-full lg:w-auto lg:flex-shrink-0 max-w-md mx-auto lg:mx-0">
+              <div className="w-full lg:w-auto lg:flex-shrink-0">
                 <div className="relative aspect-[3/4] sm:aspect-[4/3] lg:aspect-auto lg:w-64 xl:w-75 lg:h-96 xl:h-110 translate-y-30 overflow-hidden">
                   <Image
                     src="/images/brandstory2.png"
                     alt="Workshop Image"
-                    className="w-full h-full object-cover grayscale"
+                    className="w-full h-full object-contain grayscale"
                     fill
                     sizes="(max-width: 768px) 100vw, 30vw"
                   />
