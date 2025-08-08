@@ -445,7 +445,7 @@ export function Features() {
       ref={sectionRef}
       className="relative bg-white overflow-hidden py-12 sm:py-16 lg:py-20"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
         <div className="block lg:hidden">
           <MobileVersion />
         </div>

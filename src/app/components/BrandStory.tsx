@@ -60,7 +60,7 @@ export function BrandStory() {
       </div>
 
       {/* 텍스트 섹션 - 중앙 정렬 */}
-      <div className="relative z-10 flex flex-col justify-center min-h-[70vh] px-4 sm:px-6 lg:px-8 py-16">
+      <div className="relative z-10 flex flex-col justify-center min-h-[70vh] px-6 sm:px-8 lg:px-10 py-16">
         <h3
           className="text-white text-lg font-medium mb-10 font-poppins"
           style={{
@@ -131,7 +131,7 @@ export function BrandStory() {
   const DesktopVersion = () => (
     <div className="bg-[#161616] relative h-[480px]">
       <div className="max-w-8xl mx-auto px-8 h-full">
-        <div className="flex items-center justify-center h-full gap-10">
+        <div className="flex items-center justify-center h-full gap-20">
           {/* 왼쪽 이미지 */}
           <div className="flex-shrink-0">
             <div className="relative w-76 h-106 -translate-y-50">

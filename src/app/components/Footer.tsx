@@ -12,7 +12,7 @@ export function Footer() {
         }}
       >
         {/* Content overlay */}
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center md:flex-row items-center md:justify-between max-w-7xl py-12 md:py-0">
+        <div className="relative z-10 container mx-auto px-6 sm:px-8 lg:px-10 h-full flex flex-col justify-center md:flex-row items-center md:justify-between max-w-7xl py-12 md:py-0">
           <div className="text-center md:text-left mb-8 md:mb-0">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-normal">
               결혼 준비의 시작,
@@ -35,7 +35,7 @@ export function Footer() {
 
       {/* Contact information section */}
       <div className="bg-[#161616] py-12 sm:py-14 md:py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
           <div className="grid grid-cols-2 text-white/40">
             {/* Left side - Contact info */}
             <div className="space-y-8 sm:space-y-10 md:space-y-12">

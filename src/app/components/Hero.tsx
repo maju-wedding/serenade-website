@@ -13,7 +13,7 @@ export function Hero() {
 
       {/* 콘텐츠 영역 */}
       <div className="relative z-10 w-full pt-40 sm:pt-60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
           <div className="flex flex-col items-center">
             {/* 제목 */}
             <div className="space-y-4 mb-12">
