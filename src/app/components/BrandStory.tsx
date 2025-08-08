@@ -44,14 +44,14 @@ export function BrandStory() {
 
   // 모바일 버전 컴포넌트
   const MobileVersion = () => (
-    <div className="relative bg-[#161616] min-h-[70vh]">
+    <div className="relative bg-[#161616]">
       {/* 배경 이미지로 brandstory1.png 사용 */}
-      <div className="absolute z-0 right-0 top-20">
-        <div className="relative w-72 h-80">
+      <div className="absolute z-0 right-0 top-30">
+        <div className="relative w-60 h-80">
           <Image
             src="/images/brandstory1.png"
             alt="Couple Image"
-            className="w-full h-full object-cover grayscale opacity-50"
+            className="w-full h-full object-cover grayscale opacity-30"
             fill
             sizes="100vw"
             priority
@@ -60,20 +60,19 @@ export function BrandStory() {
       </div>
 
       {/* 텍스트 섹션 - 중앙 정렬 */}
-      <div className="relative z-10 flex flex-col justify-center min-h-[70vh] px-6 sm:px-8 lg:px-10 py-16">
-        <h3
-          className="text-white text-lg font-medium mb-10 font-poppins"
-          style={{
-            fontFamily: "var(--font-poppins), Poppins, sans-serif",
-            opacity: isVisible ? 1 : 0,
-            transform: isVisible ? "translateY(0)" : "translateY(20px)",
-            transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
-          }}
-        >
-          Brand Story
-        </h3>
-
+      <div className="relative z-10 flex flex-col justify-center items-center min-h-[70vh] px-6 sm:px-8 lg:px-10 py-16 text-left">
         <div className="text-white/90 font-normal" style={getAnimationStyle()}>
+          <h3
+            className="text-white text-lg font-medium mb-10 font-poppins text-left"
+            style={{
+              fontFamily: "var(--font-poppins), Poppins, sans-serif",
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? "translateY(0)" : "translateY(20px)",
+              transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+            }}
+          >
+            Brand Story
+          </h3>
           <p className="text-lg leading-[28px] mb-1">
             세레나데는, 저희 부부의 수많은
           </p>
@@ -111,13 +110,13 @@ export function BrandStory() {
       </div>
 
       {/* 하단 이미지 섹션 - brandstory2.png를 오른쪽 하단에 배치 */}
-      <div className="relative w-full h-60">
+      <div className="relative w-full">
         <div className="absolute left-6 bottom-0">
           <div className="relative aspect-[9/16] w-72 h-80">
             <Image
               src="/images/brandstory2.png"
               alt="Workshop Image"
-              className="object-contain object-left grayscale opacity-50"
+              className="object-contain object-left grayscale opacity-30"
               fill
               sizes="70vw"
             />

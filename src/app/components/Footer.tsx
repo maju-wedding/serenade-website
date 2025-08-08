@@ -36,14 +36,14 @@ export function Footer() {
       {/* Contact information section */}
       <div className="bg-[#161616] py-12 sm:py-14 md:py-16">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
-          <div className="grid grid-cols-2 text-white/40">
+          <div className="grid grid-cols-3 text-white/40">
             {/* Left side - Contact info */}
-            <div className="space-y-8 sm:space-y-10 md:space-y-12">
+            <div className="space-y-8 sm:space-y-10 md:space-y-12 col-span-2">
               <div>
-                <h3 className="text-base sm:text-lg font-bold mb-6 sm:mb-10 md:mb-14">
+                <h3 className="text-base text-md sm:text-lg font-bold mb-6 sm:mb-10 md:mb-14">
                   약관
                 </h3>
-                <div className="space-y-3 sm:space-y-4 text-sm sm:text-md font-bold">
+                <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm md:text-md font-bold">
                   <p className="cursor-pointer hover:text-white transition-colors">
                     이용약관
                   </p>
@@ -57,11 +57,11 @@ export function Footer() {
               </div>
 
               <div>
-                <div className="space-y-3 sm:space-y-4 text-sm sm:text-md font-bold">
+                <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm md:text-md font-bold">
                   <p>상호명 | 세레나데</p>
                   <p>사업자 번호 | 642-22-02522</p>
                   <p className="break-all sm:break-normal">
-                    문의 메일 |{" "}
+                    문의 메일 |
                     <a
                       href="mailto:serenadeonly@gmail.com"
                       className="hover:text-white transition-colors inline-block"
@@ -74,7 +74,7 @@ export function Footer() {
             </div>
 
             {/* Right side - Instagram */}
-            <div className="flex justify-center md:justify-end">
+            <div className="flex justify-end">
               <a
                 href="https://www.instagram.com/serenade_wedding_official/"
                 target="_blank"
@@ -82,7 +82,7 @@ export function Footer() {
                 className="text-gray-400 hover:text-white transition-colors"
                 aria-label="세레나데 인스타그램"
               >
-                <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9">
+                <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8">
                   <Image
                     src="/images/instagram.svg"
                     alt="Instagram"

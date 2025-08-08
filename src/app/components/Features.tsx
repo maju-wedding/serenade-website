@@ -171,7 +171,7 @@ export function Features() {
     }, []);
 
     return (
-      <div className="space-y-30 sm:space-y-40">
+      <div className="space-y-30 sm:space-y-40 my-20">
         {features.map((feature, index) => (
           <div
             key={index}
