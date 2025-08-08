@@ -72,7 +72,6 @@ export function Features() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // 약간의 지연 후 애니메이션 시작
             observer.unobserve(entry.target);
           }
         });
@@ -176,7 +175,9 @@ export function Features() {
         {features.map((feature, index) => (
           <div
             key={index}
-            ref={(el) => (itemRefs.current[index] = el)}
+            ref={(el) => {
+              itemRefs.current[index] = el;
+            }}
             className="space-y-12"
           >
             <div className="text-center space-y-4 px-4">
