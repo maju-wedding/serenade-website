@@ -4,12 +4,20 @@ import { useEffect, useRef, useState } from "react";
 
 export function MainStory() {
   const sectionRef = useRef<HTMLElement>(null);
-  const [activeLineIndex, setActiveLineIndex] = useState(0); // 현재 활성화된 라인 인덱스
+  const [currentLineIndex, setCurrentLineIndex] = useState(0);
   const [isInView, setIsInView] = useState(false);
+  const [hasSeenLines, setHasSeenLines] = useState<boolean[]>([
+    false,
+    false,
+    false,
+    false,
+  ]);
+  const isTransitioning = useRef(false);
+  const lastUpdateTime = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!sectionRef.current) return;
+      if (!sectionRef.current || isTransitioning.current) return;
 
       const rect = sectionRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
@@ -19,39 +27,73 @@ export function MainStory() {
       setIsInView(inView);
 
       if (!inView) {
-        setActiveLineIndex(0); // 뷰포트 밖이면 첫 번째 라인으로 리셋
+        // 섹션을 벗어났을 때 초기화
+        if (rect.top > windowHeight) {
+          setCurrentLineIndex(0);
+          setHasSeenLines([false, false, false, false]);
+        }
         return;
       }
 
-      // 섹션 내에서의 스크롤 진행도 계산
+      // 스크롤 진행도 계산
+      const sectionTop = rect.top;
       const sectionHeight = rect.height;
-      const scrollableHeight = sectionHeight - windowHeight;
+      const scrollProgress =
+        Math.max(0, -sectionTop) / (sectionHeight - windowHeight);
+      const clampedProgress = Math.max(0, Math.min(1, scrollProgress));
 
-      // 섹션 상단이 뷰포트 상단에서 얼마나 위에 있는지 계산
-      const scrolledAmount = -rect.top;
-
-      // 진행률 계산 (0 ~ 1)
-      let progress = scrolledAmount / scrollableHeight;
-      progress = Math.max(0, Math.min(1, progress));
-
-      // 4개 라인 중 어떤 라인을 강조할지 결정
-      const totalLines = 4;
-      let currentIndex = Math.floor(progress * totalLines);
-
-      // 마지막에 도달했을 때 마지막 라인에 고정
-      if (progress === 1) {
-        currentIndex = totalLines - 1;
+      // 목표 인덱스 계산 (각 라인이 충분한 구간을 가지도록)
+      let targetIndex = 0;
+      if (clampedProgress < 0.2) {
+        targetIndex = 0;
+      } else if (clampedProgress < 0.4) {
+        targetIndex = 1;
+      } else if (clampedProgress < 0.65) {
+        targetIndex = 2; // 세 번째 라인에 더 긴 구간 할당
+      } else {
+        targetIndex = 3;
       }
 
-      // 처음 섹션에 진입했을 때는 첫 번째 라인 유지
-      if (scrolledAmount <= 0) {
-        currentIndex = 0;
-      }
+      const now = Date.now();
+      const timeSinceLastUpdate = now - lastUpdateTime.current;
 
-      setActiveLineIndex(currentIndex);
+      // 현재 인덱스와 목표 인덱스가 다르고, 충분한 시간이 지났을 때
+      if (targetIndex !== currentLineIndex && timeSinceLastUpdate > 300) {
+        // 스크롤 방향 확인
+        if (targetIndex > currentLineIndex) {
+          // 아래로 스크롤 - 한 단계씩 진행
+          const nextIndex = currentLineIndex + 1;
+
+          if (nextIndex <= targetIndex && nextIndex < 4) {
+            isTransitioning.current = true;
+            setCurrentLineIndex(nextIndex);
+            setHasSeenLines((prev) => {
+              const newSeen = [...prev];
+              newSeen[nextIndex] = true;
+              return newSeen;
+            });
+            lastUpdateTime.current = now;
+
+            // 목표까지 더 가야 한다면 짧은 지연 후 다시 확인
+            if (nextIndex < targetIndex) {
+              setTimeout(() => {
+                isTransitioning.current = false;
+                handleScroll();
+              }, 400);
+            } else {
+              setTimeout(() => {
+                isTransitioning.current = false;
+              }, 400);
+            }
+          }
+        } else {
+          // 위로 스크롤 - 바로 이동
+          setCurrentLineIndex(targetIndex);
+          lastUpdateTime.current = now;
+        }
+      }
     };
 
-    // 초기 로드 시 체크
     handleScroll();
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -61,42 +103,40 @@ export function MainStory() {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
     };
-  }, []);
+  }, [currentLineIndex]);
 
-  // 각 라인의 스타일 계산
-  const getLineStyle = (lineIndex: number) => {
-    // 현재 활성화된 라인인지 확인
-    const isActive = lineIndex === activeLineIndex && isInView;
+  const getLineStyle = (index: number) => {
+    if (!isInView) {
+      return {
+        opacity: 0.2,
+        transform: "scale(0.9)",
+        color: "rgb(209, 213, 219)",
+      };
+    }
 
-    // 이미 지나간 라인인지 확인
-    const isPassed = lineIndex < activeLineIndex && isInView;
+    const isActive = index === currentLineIndex;
+    const hasSeen = hasSeenLines[index];
 
     if (isActive) {
-      // 활성화된 라인 스타일
       return {
         opacity: 1,
-        transform: `scale(1.1) translateY(-3px)`,
-        color: `rgb(0, 0, 0)`,
-        transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
-        transformOrigin: "center",
+        transform: "scale(1.05) translateY(-4px)",
+        color: "rgb(0, 0, 0)",
+        transition: "all 0.5s ease-out",
       };
-    } else if (isPassed) {
-      // 이미 지나간 라인 스타일
+    } else if (hasSeen) {
       return {
-        opacity: 0.4,
-        transform: `scale(0.9)`,
-        color: `rgb(156, 163, 175)`, // gray-400
-        transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
-        transformOrigin: "center",
+        opacity: 0.5,
+        transform: "scale(0.95)",
+        color: "rgb(107, 114, 128)",
+        transition: "all 0.5s ease-out",
       };
     } else {
-      // 아직 활성화되지 않은 라인 스타일
       return {
-        opacity: 0.3,
-        transform: `scale(0.9)`,
-        color: `rgb(156, 163, 175)`, // gray-400
-        transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
-        transformOrigin: "center",
+        opacity: 1,
+        transform: "scale(0.9)",
+        color: "rgb(209, 213, 219)",
+        transition: "all 0.5s ease-out",
       };
     }
   };
@@ -113,22 +153,20 @@ export function MainStory() {
       ref={sectionRef}
       id="main-story"
       className="relative bg-white"
-      style={{ height: "200vh" }} // 충분한 스크롤 공간 확보
+      style={{ height: "300vh" }}
     >
-      <div className="sticky top-0 h-screen flex items-center justify-center bg-white">
-        <div className="container mx-auto px-6">
-          <div className="text-center">
-            <div className="max-w-4xl mx-auto space-y-4">
-              {lines.map((line, index) => (
-                <p
-                  key={index}
-                  className="text-4xl font-bold leading-tight"
-                  style={getLineStyle(index)}
-                >
-                  {line}
-                </p>
-              ))}
-            </div>
+      <div className="sticky top-0 h-screen flex items-center justify-center">
+        <div className="mx-auto">
+          <div className="max-w-4xl mx-auto text-center">
+            {lines.map((line, index) => (
+              <p
+                key={index}
+                className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6"
+                style={getLineStyle(index)}
+              >
+                {line}
+              </p>
+            ))}
           </div>
         </div>
       </div>
