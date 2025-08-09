@@ -76,10 +76,10 @@ export function BrandStory() {
           </h3>
           <div className="space-y-1">
             <p className="text-md sm:text-lg leading-[24px] sm:leading-[28px]">
-              세레나데는, 저희 부부의 수많은
+              세레나데는, 저희 부부가 결혼을
             </p>
             <p className="text-md sm:text-lg leading-[24px] sm:leading-[28px]">
-              고민과 시행착오에서 시작됐습니다.
+              준비하며 마주한 경험에서 시작됐습니다.
             </p>
             <p className="text-md sm:text-lg leading-[24px] sm:leading-[28px]">
               정보는 넘쳤지만, 진짜 필요한 건
@@ -166,9 +166,10 @@ export function BrandStory() {
               style={getAnimationStyle()}
             >
               <p className="text-base xl:text-lg 2xl:text-xl leading-relaxed lg:leading-loose">
-                세레나데는, 저희 부부의 수많은 고민과 시행착오에서 시작됐습니다.
+                세레나데는, 저희 부부가 결혼을 준비하며 마주한 경험에서
+                시작됐습니다.
                 <br />
-                정보는 넘쳤지만, 진짜 필요한 건 찾기어려웠고 점점 지쳐갔죠.
+                정보는 넘쳤지만, 진짜 필요한 건 찾기 어려웠고 점점 지쳐갔죠.
                 <br />
                 그래서 생각했어요. &ldquo;조금 더 나은 방식으로 결혼을 준비할 순
                 없을까?&rdquo;

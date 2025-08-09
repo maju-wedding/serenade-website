@@ -4,13 +4,24 @@ import Image from "next/image";
 export function Footer() {
   return (
     <footer className="bg-black text-white">
-      {/* Main footer content with background image */}
-      <div
-        className="relative w-full h-[400px] sm:h-[450px] md:h-[510px] bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "url(/images/footer.png)",
-        }}
-      >
+      {/* Main footer content with responsive background image */}
+      <div className="relative w-full h-[400px] sm:h-[450px] md:h-[510px]">
+        {/* Mobile background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat md:hidden"
+          style={{
+            backgroundImage: "url(/images/footer-mobile.png)",
+          }}
+        ></div>
+
+        {/* Desktop background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat hidden md:block"
+          style={{
+            backgroundImage: "url(/images/footer.png)",
+          }}
+        ></div>
+
         {/* Content overlay */}
         <div className="relative z-10 container mx-auto px-6 sm:px-8 xl:px-10 h-full flex flex-col justify-center lg:flex-row items-center lg:justify-between max-w-7xl py-12 lg:py-0">
           <div className="text-center lg:text-left mb-8 lg:mb-0">
@@ -20,15 +31,25 @@ export function Footer() {
               세레나데와 함께하세요.
             </h2>
           </div>
-          {/* QRCODE */}
+          {/* Mobile: Button, Desktop: QR Code */}
           <div className="flex-shrink-0">
-            <Image
-              src="/images/qrcode.png"
-              alt="QR Code"
-              className="w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36"
-              width={148}
-              height={148}
-            />
+            {/* Mobile Button */}
+            <div className="md:hidden">
+              <button className="bg-white text-black px-8 py-3 rounded-full font-bold text-md hover:bg-[#e5533a] transition-colors">
+                지금 시작하기
+              </button>
+            </div>
+
+            {/* Desktop QR Code */}
+            <div className="hidden md:block">
+              <Image
+                src="/images/qrcode.png"
+                alt="QR Code"
+                className="w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36"
+                width={148}
+                height={148}
+              />
+            </div>
           </div>
         </div>
       </div>

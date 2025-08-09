@@ -1,17 +1,32 @@
 "use client";
 
+import Image from "next/image";
+
 export function Hero() {
   return (
     <section id="home" className="relative min-h-screen flex items-center">
       {/* 배경 이미지 */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url('/images/hero.png')`,
-        }}
-      ></div>
-      {/* Black Overlay */}
-      <div className="absolute inset-0 bg-black/10"></div>
+      <div className="absolute inset-0">
+        {/* 모바일 이미지 */}
+        <Image
+          src="/images/hero-mobile.png"
+          alt="Hero mobile"
+          fill
+          className="object-cover md:hidden"
+          sizes="100vw"
+          priority
+        />
+
+        {/* 데스크톱 이미지 */}
+        <Image
+          src="/images/hero-pc.png"
+          alt="Hero desktop"
+          fill
+          className="object-cover hidden md:block"
+          sizes="100vw"
+          priority
+        />
+      </div>
 
       {/* 콘텐츠 영역 */}
       <div className="relative z-10 w-full pt-40 sm:pt-60">
@@ -19,7 +34,7 @@ export function Hero() {
           <div className="flex flex-col items-center">
             {/* 제목 */}
             <div className="space-y-4 mb-12">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium leading-tight text-white text-center">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium leading-tight text-white text-center">
                 <span className="block mb-2">가장 우리다운 결혼 준비</span>
                 <span className="block">광고 없는 진짜 웨딩앱</span>
               </h2>
@@ -45,20 +60,6 @@ export function Hero() {
                 <span>앱 다운로드</span>
               </a>
             </div>
-
-            {/* 앱스토어 배지 이미지 (선택사항) */}
-            {/*<div className="mt-8 sm:mt-10 lg:mt-12 flex flex-col sm:flex-row gap-4 items-center">*/}
-            {/*  <div className="flex items-center gap-2 text-white/60 text-xs sm:text-sm">*/}
-            {/*    <svg*/}
-            {/*      className="w-4 h-4"*/}
-            {/*      fill="currentColor"*/}
-            {/*      viewBox="0 0 20 20"*/}
-            {/*    >*/}
-            {/*      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />*/}
-            {/*    </svg>*/}
-            {/*    <span>4.8 평점 | 1,000+ 다운로드</span>*/}
-            {/*  </div>*/}
-            {/*</div>*/}
           </div>
         </div>
       </div>

@@ -11,6 +11,7 @@ export function MainStory() {
     false,
     false,
     false,
+    false,
   ]);
   const isTransitioning = useRef(false);
   const lastUpdateTime = useRef(0);
@@ -30,7 +31,7 @@ export function MainStory() {
         // 섹션을 벗어났을 때 초기화
         if (rect.top > windowHeight) {
           setCurrentLineIndex(0);
-          setHasSeenLines([false, false, false, false]);
+          setHasSeenLines([false, false, false, false, false]);
         }
         return;
       }
@@ -42,16 +43,18 @@ export function MainStory() {
         Math.max(0, -sectionTop) / (sectionHeight - windowHeight);
       const clampedProgress = Math.max(0, Math.min(1, scrollProgress));
 
-      // 목표 인덱스 계산 (각 라인이 충분한 구간을 가지도록)
+      // 목표 인덱스 계산 (5개 라인에 맞춰 구간 조정)
       let targetIndex = 0;
-      if (clampedProgress < 0.2) {
+      if (clampedProgress < 0.15) {
         targetIndex = 0;
-      } else if (clampedProgress < 0.4) {
+      } else if (clampedProgress < 0.3) {
         targetIndex = 1;
-      } else if (clampedProgress < 0.65) {
-        targetIndex = 2; // 세 번째 라인에 더 긴 구간 할당
-      } else {
+      } else if (clampedProgress < 0.5) {
+        targetIndex = 2;
+      } else if (clampedProgress < 0.7) {
         targetIndex = 3;
+      } else {
+        targetIndex = 4;
       }
 
       const now = Date.now();
@@ -64,7 +67,7 @@ export function MainStory() {
           // 아래로 스크롤 - 한 단계씩 진행
           const nextIndex = currentLineIndex + 1;
 
-          if (nextIndex <= targetIndex && nextIndex < 4) {
+          if (nextIndex <= targetIndex && nextIndex < 5) {
             isTransitioning.current = true;
             setCurrentLineIndex(nextIndex);
             setHasSeenLines((prev) => {
@@ -143,9 +146,10 @@ export function MainStory() {
 
   const lines = [
     "어디서부터 시작해야 할지 막막했어요.",
-    "웨딩홀부터 계약해야 하는지,",
-    "웨딩플래너부터 만나야 하는지,",
-    "웨딩박람회부터 가야 하는지...",
+    "업체마다 가격이 제각각이라 신뢰하기 어려워요.",
+    "정보는 넘치는데 정리가 안되요.",
+    "내가 원하는 정보를 찾기 어려웠어요.",
+    "놓친건 없는지 불안해요.",
   ];
 
   return (
@@ -161,7 +165,7 @@ export function MainStory() {
             {lines.map((line, index) => (
               <p
                 key={index}
-                className="text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-bold mb-6"
+                className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-6"
                 style={getLineStyle(index)}
               >
                 {line}
