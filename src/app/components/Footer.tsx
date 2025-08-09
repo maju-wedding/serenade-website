@@ -25,7 +25,7 @@ export function Footer() {
         {/* Content overlay */}
         <div className="relative z-10 container mx-auto px-6 sm:px-8 xl:px-10 h-full flex flex-col justify-center lg:flex-row items-center lg:justify-between max-w-7xl py-12 lg:py-0">
           <div className="text-center lg:text-left mb-8 lg:mb-0">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-normal">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl sm:font-bold text-white leading-normal">
               결혼 준비의 시작,
               <br />
               세레나데와 함께하세요.

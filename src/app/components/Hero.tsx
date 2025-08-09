@@ -115,11 +115,11 @@ export function Hero() {
         }
 
         .animate-scroll-down {
-          animation: scroll-down 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+          animation: scroll-down 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
 
         .animate-bounce-slow {
-          animation: bounce-slow 2s ease-in-out infinite;
+          animation: bounce-slow 3s ease-in-out infinite;
         }
       `}</style>
     </section>

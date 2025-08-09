@@ -187,7 +187,7 @@ export function Features() {
           >
             <div className="text-left space-y-4 ">
               <span
-                className="inline-block text-[#FB6541] font-bold text-lg sm:text-xl uppercase"
+                className="inline-block text-[#FB6541] font-bold text-[18px] sm:text-xl uppercase"
                 style={{
                   opacity: visibleItems[index] ? 1 : 0,
                   transform: visibleItems[index]
@@ -200,7 +200,7 @@ export function Features() {
               </span>
 
               <h2
-                className="text-3xl sm:text-4xl font-bold text-gray-900 leading-normal whitespace-pre-line"
+                className="text-[28px] sm:text-4xl font-bold text-gray-900 leading-normal whitespace-pre-line"
                 style={{
                   opacity: visibleItems[index] ? 1 : 0,
                   transform: visibleItems[index]
@@ -213,7 +213,7 @@ export function Features() {
               </h2>
 
               <p
-                className="text-gray-600 text-base sm:text-lg leading-relaxed whitespace-pre-line"
+                className="text-gray-600 text-[16px] sm:text-lg leading-relaxed whitespace-pre-line"
                 style={{
                   opacity: visibleItems[index] ? 1 : 0,
                   transform: visibleItems[index]
