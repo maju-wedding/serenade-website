@@ -35,9 +35,14 @@ export function Footer() {
           <div className="flex-shrink-0">
             {/* Mobile Button */}
             <div className="md:hidden">
-              <button className="bg-white text-black px-8 py-3 rounded-full font-bold text-md hover:bg-[#e5533a] hover:bg-white transition-colors">
+              <a
+                href="https://apps.apple.com/kr/app/%EC%84%B8%EB%A0%88%EB%82%98%EB%8D%B0-%EA%B4%91%EA%B3%A0-%EC%97%86%EB%8A%94-%EC%A7%84%EC%A7%9C-%EC%9B%A8%EB%94%A9-%EC%95%B1/id6747605861"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-white text-black px-8 py-3 rounded-full font-bold text-md hover:bg-[#e5533a] hover:text-white transition-colors text-center cursor-pointer"
+              >
                 지금 시작하기
-              </button>
+              </a>
             </div>
 
             {/* Desktop QR Code */}
@@ -65,15 +70,22 @@ export function Footer() {
                   약관
                 </h3>
                 <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm md:text-md font-bold">
-                  <p className="cursor-pointer hover:text-white transition-colors">
-                    이용약관
-                  </p>
-                  <p className="cursor-pointer hover:text-white transition-colors">
+                  <a
+                    href="https://d8erw6l13w214.cloudfront.net/service_policy.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block cursor-pointer hover:text-white transition-colors"
+                  >
+                    서비스 이용약관
+                  </a>
+                  <a
+                    href="https://d8erw6l13w214.cloudfront.net/privacy_policy.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block cursor-pointer hover:text-white transition-colors"
+                  >
                     개인정보 처리방침
-                  </p>
-                  <p className="cursor-pointer hover:text-white transition-colors">
-                    커뮤니티 가이드라인
-                  </p>
+                  </a>
                 </div>
               </div>
 
@@ -82,7 +94,7 @@ export function Footer() {
                   <p>상호명 | 세레나데</p>
                   <p>사업자 번호 | 642-22-02522</p>
                   <p className="break-all sm:break-normal">
-                    문의 메일 |
+                    문의 메일 |{"  "}
                     <a
                       href="mailto:serenadeonly@gmail.com"
                       className="hover:text-white transition-colors inline-block"

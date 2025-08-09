@@ -17,6 +17,7 @@ export function Features() {
       description:
         "순서대로 짚어주는 웨딩 가이드로\n혼자서도 차근차근 준비할 수 있어요.",
       appScreen: "/images/service1.png",
+      mobileScreen: "/images/service1-mobile.png",
       appAlt: "웨딩 가이드 서비스",
     },
     {
@@ -24,6 +25,7 @@ export function Features() {
       subtitle: "웨딩홀 가격 공개",
       description: "이제 웨딩홀 비용,\n직접 비교하고 똑똑하게 선택해보세요.",
       appScreen: "/images/service2.png",
+      mobileScreen: "/images/service2-mobile.png",
       appAlt: "가격 공개",
     },
     {
@@ -32,6 +34,7 @@ export function Features() {
       description:
         "긴 글은 AI가 빠르게 요약해줘서\n중요한 내용만 골라볼 수 있어요.",
       appScreen: "/images/service3.png",
+      mobileScreen: "/images/service3-mobile.png",
       appAlt: "AI 리뷰 분석 서비스",
     },
     {
@@ -40,6 +43,7 @@ export function Features() {
       description:
         "할 일을 하나하나 지우며\n결혼 준비의 진짜 진척을 느껴보세요.",
       appScreen: "/images/service5.png",
+      mobileScreen: "/images/service5-mobile.png",
       appAlt: "체크리스트 서비스",
     },
     {
@@ -48,6 +52,7 @@ export function Features() {
       description:
         "지출 내역을 항목별로 입력하고\n남은 예산도 한눈에 확인할 수 있어요.",
       appScreen: "/images/service5.png",
+      mobileScreen: "/images/service5-mobile.png",
       appAlt: "예산 관리 서비스",
     },
   ];
@@ -182,7 +187,7 @@ export function Features() {
           >
             <div className="text-left space-y-4 ">
               <span
-                className="inline-block text-[#FB6541] font-bold text-xl uppercase"
+                className="inline-block text-[#FB6541] font-bold text-lg sm:text-xl uppercase"
                 style={{
                   opacity: visibleItems[index] ? 1 : 0,
                   transform: visibleItems[index]
@@ -195,7 +200,7 @@ export function Features() {
               </span>
 
               <h2
-                className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight whitespace-pre-line"
+                className="text-3xl sm:text-4xl font-bold text-gray-900 leading-normal whitespace-pre-line"
                 style={{
                   opacity: visibleItems[index] ? 1 : 0,
                   transform: visibleItems[index]
@@ -232,7 +237,7 @@ export function Features() {
               }}
             >
               <Image
-                src={feature.appScreen}
+                src={feature.mobileScreen}
                 alt={feature.appAlt}
                 className="w-full h-full object-contain"
                 fill

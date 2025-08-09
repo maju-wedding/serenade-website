@@ -146,7 +146,7 @@ export function MainStory() {
 
   const lines = [
     "어디서부터 시작해야 할지 막막했어요.",
-    "업체마다 가격이 제각각이라 신뢰하기 어려워요.",
+    "업체마다 가격이 달라서 신뢰하기 어려워요.",
     "정보는 넘치는데 정리가 안되요.",
     "내가 원하는 정보를 찾기 어려웠어요.",
     "놓친건 없는지 불안해요.",
@@ -165,7 +165,7 @@ export function MainStory() {
             {lines.map((line, index) => (
               <p
                 key={index}
-                className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-6"
+                className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-2 sm:mb-4 md:mb-6"
                 style={getLineStyle(index)}
               >
                 {line}

@@ -3,11 +3,18 @@
 import Image from "next/image";
 
 export function Hero() {
+  const scrollToNext = () => {
+    const nextSection = document.querySelector("#main-story");
+    if (nextSection) {
+      nextSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
   return (
-    <section
-      id="home"
-      className="relative min-h-screen md:min-h-[80vh] flex items-center"
-    >
+    <section id="home" className="relative min-h-screen flex items-center">
       {/* 배경 이미지 */}
       <div className="absolute inset-0">
         {/* 모바일 이미지 */}
@@ -22,7 +29,7 @@ export function Hero() {
 
         {/* 데스크톱 이미지 */}
         <Image
-          src="/images/hero-pc.png"
+          src="/images/hero.png"
           alt="Hero desktop"
           fill
           className="object-cover hidden md:block"
@@ -66,6 +73,55 @@ export function Hero() {
           </div>
         </div>
       </div>
+
+      {/* 스크롤 인디케이터 */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
+        <button
+          onClick={scrollToNext}
+          className="text-white/80 hover:text-white transition-colors duration-300 group animate-bounce-slow"
+          aria-label="아래로 스크롤"
+        >
+          {/* 마우스 아이콘 */}
+          <div className="relative w-7 h-11 border-2 border-white/60 rounded-full group-hover:border-white transition-colors duration-300">
+            <div className="absolute left-1/2 transform -translate-x-1/2 top-2 w-1.5 h-3 bg-white/80 rounded-full animate-scroll-down"></div>
+          </div>
+        </button>
+      </div>
+
+      {/* 커스텀 애니메이션 스타일 */}
+      <style jsx>{`
+        @keyframes scroll-down {
+          0% {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.5;
+          }
+          100% {
+            transform: translateX(-50%) translateY(12px);
+            opacity: 0;
+          }
+        }
+
+        @keyframes bounce-slow {
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+
+        .animate-scroll-down {
+          animation: scroll-down 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .animate-bounce-slow {
+          animation: bounce-slow 2s ease-in-out infinite;
+        }
+      `}</style>
     </section>
   );
 }
