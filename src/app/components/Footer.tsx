@@ -35,7 +35,7 @@ export function Footer() {
           <div className="flex-shrink-0">
             {/* Mobile Button */}
             <div className="md:hidden">
-              <button className="bg-white text-black px-8 py-3 rounded-full font-bold text-md hover:bg-[#e5533a] transition-colors">
+              <button className="bg-white text-black px-8 py-3 rounded-full font-bold text-md hover:bg-[#e5533a] hover:bg-white transition-colors">
                 지금 시작하기
               </button>
             </div>

@@ -4,7 +4,10 @@ import Image from "next/image";
 
 export function Hero() {
   return (
-    <section id="home" className="relative min-h-screen flex items-center">
+    <section
+      id="home"
+      className="relative min-h-screen md:min-h-[80vh] flex items-center"
+    >
       {/* 배경 이미지 */}
       <div className="absolute inset-0">
         {/* 모바일 이미지 */}
