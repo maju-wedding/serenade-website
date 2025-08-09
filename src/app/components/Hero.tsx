@@ -10,6 +10,8 @@ export function Hero() {
           backgroundImage: `url('/images/hero.png')`,
         }}
       ></div>
+      {/* Black Overlay */}
+      <div className="absolute inset-0 bg-black/10"></div>
 
       {/* 콘텐츠 영역 */}
       <div className="relative z-10 w-full pt-40 sm:pt-60">
@@ -17,7 +19,7 @@ export function Hero() {
           <div className="flex flex-col items-center">
             {/* 제목 */}
             <div className="space-y-4 mb-12">
-              <h2 className="text-4xl md:text-5xl font-medium leading-tight text-white text-center">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium leading-tight text-white text-center">
                 <span className="block mb-2">가장 우리다운 결혼 준비</span>
                 <span className="block">광고 없는 진짜 웨딩앱</span>
               </h2>

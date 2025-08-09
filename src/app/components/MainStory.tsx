@@ -161,7 +161,7 @@ export function MainStory() {
             {lines.map((line, index) => (
               <p
                 key={index}
-                className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6"
+                className="text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-bold mb-6"
                 style={getLineStyle(index)}
               >
                 {line}

@@ -52,7 +52,7 @@ export function Features() {
     },
   ];
 
-  const SLIDE_DURATION = 3000;
+  const SLIDE_DURATION = 5000;
   const PROGRESS_INTERVAL = 10;
 
   // 화면 크기 감지
@@ -171,7 +171,7 @@ export function Features() {
     }, []);
 
     return (
-      <div className="space-y-30 sm:space-y-40 my-20">
+      <div className="space-y-30 sm:space-y-40 mb-20 mt-40">
         {features.map((feature, index) => (
           <div
             key={index}
@@ -180,7 +180,7 @@ export function Features() {
             }}
             className="space-y-12"
           >
-            <div className="text-center space-y-4 px-4">
+            <div className="text-left space-y-4 ">
               <span
                 className="inline-block text-[#FB6541] font-bold text-xl uppercase"
                 style={{
@@ -208,7 +208,7 @@ export function Features() {
               </h2>
 
               <p
-                className="text-gray-600 text-base sm:text-lg leading-relaxed whitespace-pre-line max-w-lg mx-auto"
+                className="text-gray-600 text-base sm:text-lg leading-relaxed whitespace-pre-line"
                 style={{
                   opacity: visibleItems[index] ? 1 : 0,
                   transform: visibleItems[index]
@@ -443,7 +443,7 @@ export function Features() {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-white overflow-hidden py-12 sm:py-16 lg:py-20"
+      className="relative lg:bg-white lg:overflow-hidden py-12 sm:py-16 lg:py-20"
     >
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
         <div className="block lg:hidden">
