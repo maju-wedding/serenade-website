@@ -127,13 +127,6 @@ export function Footer() {
               </a>
             </div>
           </div>
-
-          {/* Mobile copyright section */}
-          <div className="mt-12 pt-8 border-t border-white/10 text-center md:hidden">
-            <p className="text-xs text-white/30">
-              © 2025 SERENADE. All rights reserved.
-            </p>
-          </div>
         </div>
       </div>
     </footer>
