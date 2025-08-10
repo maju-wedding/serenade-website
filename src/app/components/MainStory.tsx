@@ -157,7 +157,7 @@ export function MainStory() {
       ref={sectionRef}
       id="main-story"
       className="relative bg-white"
-      style={{ height: "300vh" }}
+      style={{ height: "325vh" }}
     >
       <div className="sticky top-0 h-screen flex items-center justify-center">
         <div className="mx-auto">

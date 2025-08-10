@@ -8,6 +8,7 @@ export function Features() {
   const progressRef = useRef<number>(0);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [isInView, setIsInView] = useState(false); // 스크롤 도달 여부
   const sectionRef = useRef<HTMLElement>(null);
 
   const features = [
@@ -71,18 +72,18 @@ export function Features() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // IntersectionObserver로 스크롤 감지
+  // IntersectionObserver로 스크롤 감지 - 화면에 들어왔을 때 애니메이션 시작
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            observer.unobserve(entry.target);
+          if (entry.isIntersecting && !isInView) {
+            setIsInView(true); // 화면에 들어왔을 때 애니메이션 시작
           }
         });
       },
       {
-        threshold: 0.1,
+        threshold: 0.3, // 30% 이상 보일 때 시작
       },
     );
 
@@ -96,11 +97,11 @@ export function Features() {
         observer.unobserve(currentSection);
       }
     };
-  }, []);
+  }, [isInView]);
 
-  // 데스크톱용 슬라이드 애니메이션
+  // 데스크톱용 슬라이드 애니메이션 - 화면에 보일 때만 작동
   useEffect(() => {
-    if (isMobile) return;
+    if (isMobile || !isInView) return; // 모바일이거나 화면에 보이지 않으면 실행하지 않음
 
     progressRef.current = 0;
     if (progressBarRef.current) {
@@ -123,7 +124,7 @@ export function Features() {
     return () => {
       clearInterval(progressTimer);
     };
-  }, [currentSlide, features.length, isMobile]);
+  }, [currentSlide, features.length, isMobile, isInView]);
 
   const goToPrevious = () => {
     setCurrentSlide((prev) => (prev === 0 ? features.length - 1 : prev - 1));
@@ -256,33 +257,13 @@ export function Features() {
     const desktopRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-      // 초기 스크롤 애니메이션용 Observer
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting && !hasInitialAnimated) {
-              setTimeout(() => {
-                setHasInitialAnimated(true);
-              }, 100);
-            }
-          });
-        },
-        {
-          threshold: 0.2,
-        },
-      );
-
-      const currentDesktop = desktopRef.current;
-      if (currentDesktop) {
-        observer.observe(currentDesktop);
+      // 화면에 보일 때 초기 애니메이션 시작
+      if (isInView && !hasInitialAnimated) {
+        setTimeout(() => {
+          setHasInitialAnimated(true);
+        }, 100);
       }
-
-      return () => {
-        if (currentDesktop) {
-          observer.unobserve(currentDesktop);
-        }
-      };
-    }, [hasInitialAnimated]);
+    }, [isInView, hasInitialAnimated]);
 
     // 초기 로드 애니메이션 스타일 (처음 한 번만)
     const getInitialAnimationStyle = (delay: string = "0s") => ({
