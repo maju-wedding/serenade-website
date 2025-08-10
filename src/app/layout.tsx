@@ -45,9 +45,9 @@ export const metadata: Metadata = {
     siteName: "세레나데",
     images: [
       {
-        url: "https://serenade-wedding.com/og-image.jpg",
-        width: 1200,
-        height: 630,
+        url: "https://serenade-wedding.com/og-image.png",
+        width: 1600,
+        height: 800,
         alt: "세레나데 - 광고 없는 진짜 웨딩 앱",
       },
     ],
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "세레나데 - 광고 없는 진짜 웨딩 앱",
     description: "가장 우리다운 결혼 준비",
-    images: ["https://serenade-wedding.com/og-image.jpg"],
+    images: ["https://serenade-wedding.com/og-image.png"],
   },
 
   // Favicon and Icons
