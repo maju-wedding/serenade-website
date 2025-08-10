@@ -43,8 +43,8 @@ export function Features() {
       subtitle: "체크리스트",
       description:
         "할 일을 하나하나 지우며\n결혼 준비의 진짜 진척을 느껴보세요.",
-      appScreen: "/images/service5.png",
-      mobileScreen: "/images/service5-mobile.png",
+      appScreen: "/images/service4.png",
+      mobileScreen: "/images/service4-mobile.png",
       appAlt: "체크리스트 서비스",
     },
     {
