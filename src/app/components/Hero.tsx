@@ -44,13 +44,13 @@ export function Hero() {
           <div className="flex flex-col items-center">
             {/* 제목 */}
             <div className="mb-14">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white/90 text-center font-medium font-arima mb-2">
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white/90 text-center font-medium font-arima mb-2">
                 <span className="block">Less Stress More Love</span>
               </h2>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium leading-tight text-white text-center">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-medium leading-tight text-white text-center">
                 <span className="block mb-2">고민을 줄여줄 진짜 웨딩 앱</span>
               </h1>
-              <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/90 text-center mt-4">
+              <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 text-center mt-4">
                 <span className="block mb-1">
                   고민은 덜고 사랑에만 집중할 수 있도록
                 </span>
