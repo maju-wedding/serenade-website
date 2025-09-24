@@ -9,20 +9,61 @@
     src: url('/fonts/pretendard/woff2/PretendardVariable.woff2') format('woff2-variations');
 }
 
+/* Arima Font */
+@font-face {
+    font-family: 'Arima';
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+    src: url('/fonts/arima/Arima-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Arima';
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+    src: url('/fonts/arima/Arima-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Arima';
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+    src: url('/fonts/arima/Arima-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Arima';
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+    src: url('/fonts/arima/Arima-Bold.ttf') format('truetype');
+}
+
 :root {
     --background: #ffffff;
     --foreground: #171717;
+    --font-arima: 'Arima', sans-serif;
+    --font-poppins: 'Poppins', sans-serif;
 }
 
 @theme inline {
     --color-background: var(--background);
     --color-foreground: var(--foreground);
-    --font-sans: var(--font-geist-sans);
-    --font-mono: var(--font-geist-mono);
+    --font-sans: "Pretendard Variable", sans-serif;
+    --font-mono: monospace;
+    --font-arima: "Arima", sans-serif;
 }
 
 body {
     background: var(--background);
     color: var(--foreground);
     font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+}
+
+/* Tailwind v4 방식으로 font-arima 클래스 정의 */
+.font-arima {
+    font-family: "Arima", sans-serif !important;
 }

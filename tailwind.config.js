@@ -35,6 +35,7 @@ module.exports = {
           "sans-serif",
         ],
         poppins: ["var(--font-poppins)", "sans-serif"],
+        arima: ["Arima", "sans-serif"],
         sans: [
           "Pretendard Variable",
           "Pretendard",

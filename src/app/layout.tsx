@@ -10,8 +10,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "세레나데 - 광고 없는 진짜 웨딩 앱",
-  description: "가장 우리다운 결혼 준비",
+  title: "세레나데 - 고민을 줄여줄 진짜 웨딩 앱",
+  description: "Less Stress, More Love",
   keywords: [
     "결혼",
     "웨딩",
@@ -40,15 +40,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ko_KR",
     url: "https://serenade-wedding.com",
-    title: "세레나데 - 광고 없는 진짜 웨딩 앱",
-    description: "가장 우리다운 결혼 준비",
+    title: "세레나데 - 고민을 줄여줄 진짜 웨딩 앱",
+    description: "Less Stress, More Love",
     siteName: "세레나데",
     images: [
       {
         url: "https://serenade-wedding.com/og-image.png",
         width: 1600,
         height: 800,
-        alt: "세레나데 - 광고 없는 진짜 웨딩 앱",
+        alt: "세레나데 - 고민을 줄여줄 진짜 웨딩 앱",
       },
     ],
   },
@@ -56,8 +56,8 @@ export const metadata: Metadata = {
   // Twitter Cards
   twitter: {
     card: "summary_large_image",
-    title: "세레나데 - 광고 없는 진짜 웨딩 앱",
-    description: "가장 우리다운 결혼 준비",
+    title: "세레나데 - 고민을 줄여줄 진짜 웨딩 앱",
+    description: "Less Stress, More Love",
     images: ["https://serenade-wedding.com/og-image.png"],
   },
 
