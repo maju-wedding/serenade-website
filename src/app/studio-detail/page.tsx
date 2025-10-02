@@ -1,0 +1,895 @@
+"use client";
+
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { studioService } from "@/services/api";
+import Link from "next/link";
+import { Header } from "../components/Header";
+import { AIReviewSection } from "@/components/AIReviewSection";
+import { BlogReviewSection } from "@/components/BlogReviewSection";
+
+interface AdditionalCost {
+  id: number;
+  cost_name: string;
+  cost_type: string;
+  price: number;
+  price_text?: string;
+  description?: string;
+}
+
+interface StudioPackage {
+  id: number;
+  name: string;
+  description?: string;
+  shooting_schedule?: string;
+  shooting_duration?: number;
+  shooting_styles?: string;
+  studio_types?: string;
+  price: number;
+  costume_description?: string;
+  additional_costs?: AdditionalCost[];
+}
+
+interface StudioAmenitiesInfo {
+  has_parking?: boolean;
+  has_hair_makeup_onsite?: boolean;
+  has_pet_photography?: boolean;
+  has_photographer_selection?: boolean;
+}
+
+interface AIReview {
+  id?: number;
+  review_type?: string;
+  title?: string;
+  content: string;
+  rating?: number;
+  created_at?: string;
+}
+
+interface ScoreComparison {
+  score_type: string;
+  hall_score?: number | null;
+  studio_score?: number | null;
+  average: number;
+  difference: number;
+}
+
+interface AIScoreSummary {
+  overall_score: number;
+  overall_average?: number;
+  score_comparisons?: ScoreComparison[];
+  // Legacy fields for backward compatibility
+  atmosphere_score?: number;
+  service_score?: number;
+  price_score?: number;
+  location_score?: number;
+  facility_score?: number;
+  summary_text?: string;
+  pros?: string[];
+  cons?: string[];
+}
+
+interface BlogPost {
+  id?: number;
+  title: string;
+  url?: string;
+  link_url?: string;
+  thumbnail_url?: string;
+  excerpt?: string;
+  description?: string;
+  author?: string;
+  published_date?: string;
+}
+
+interface StudioDetail {
+  id: number;
+  name: string;
+  sido: string;
+  gugun: string;
+  dong?: string;
+  address: string;
+  hashtags: string[];
+  image_urls?: string[];
+  subway_line?: string;
+  subway_name?: string;
+  way_text?: string;
+  park_limit?: number;
+  park_free_hours?: number;
+  price?: number;
+  business_hours?: string;
+  holiday?: string;
+  shooting_styles?: string;
+  studio_type?: string;
+  scene_types?: string;
+  studio_amenities_info?: StudioAmenitiesInfo;
+  is_new_studio: boolean;
+  is_renovated_studio: boolean;
+  opening_date?: string | null;
+  renovation_date?: string | null;
+  packages?: StudioPackage[];
+  ai_reviews?: AIReview[];
+  ai_score_summary?: AIScoreSummary;
+  blogs?: BlogPost[];
+}
+
+function StudioDetailContent() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const [studio, setStudio] = useState<StudioDetail | null>(null);
+  const [packages, setPackages] = useState<StudioPackage[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (id) {
+      loadStudioDetail(id);
+    }
+  }, [id]);
+
+  const loadStudioDetail = async (studioId: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // 스튜디오 상세 정보 가져오기
+      const studioResponse = await studioService.getDetail(studioId);
+
+      // Debug: Check if blogs data exists
+      console.log("Studio Detail Response:", studioResponse);
+      console.log("Blogs data:", (studioResponse as any).blogs);
+
+      setStudio(studioResponse as any);
+
+      // 스튜디오 응답에 packages가 포함되어 있는지 먼저 확인
+      if (
+        studioResponse &&
+        (studioResponse as any).packages &&
+        Array.isArray((studioResponse as any).packages)
+      ) {
+        setPackages((studioResponse as any).packages);
+      } else {
+        // 별도 패키지 API 호출
+        try {
+          const packagesResponse = await studioService.getPackages(studioId);
+          if (Array.isArray(packagesResponse)) {
+            setPackages(packagesResponse);
+          } else if (
+            packagesResponse &&
+            typeof packagesResponse === "object" &&
+            "packages" in packagesResponse
+          ) {
+            setPackages((packagesResponse as any).packages || []);
+          } else {
+            setPackages([]);
+          }
+        } catch (error) {
+          console.error("Failed to fetch packages:", error);
+          setPackages([]);
+        }
+      }
+    } catch (err) {
+      setError("스튜디오 정보를 불러오는데 실패했습니다.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+        <p className="ml-4 text-gray-600">스튜디오 정보를 불러오는 중...</p>
+      </div>
+    );
+  }
+
+  if (error || !studio) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center">
+        <p className="text-red-600 mb-4">
+          {error || "스튜디오를 찾을 수 없습니다."}
+        </p>
+        <Link
+          href="/studios"
+          className="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+        >
+          목록으로 돌아가기
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+
+      {/* 메인 콘텐츠 - Header 높이만큼 여백 추가 */}
+      <div className="pt-20">
+        {/* 뒤로가기 버튼 */}
+        <div className="bg-gray-50">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-4">
+            <Link
+              href="/studios"
+              className="inline-flex items-center text-gray-600 hover:text-orange-600 transition-colors"
+            >
+              <svg
+                className="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              목록으로 돌아가기
+            </Link>
+          </div>
+        </div>
+
+        {/* 메인 콘텐츠 */}
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* 왼쪽: 대표 이미지 (첫 번째 이미지만 표시) */}
+            <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+              <div className="h-[400px] sm:h-[500px] relative group">
+                {studio.image_urls && studio.image_urls.length > 0 ? (
+                  <img
+                    src={studio.image_urls[0]}
+                    alt={studio.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-400">이미지가 없습니다</span>
+                  </div>
+                )}
+
+                {/* 배지 */}
+                {(studio.is_new_studio || studio.is_renovated_studio) && (
+                  <div className="absolute top-4 left-4 flex gap-2">
+                    {studio.is_new_studio && (
+                      <span className="px-3 py-1 text-xs font-medium bg-green-500 text-white rounded-full">
+                        NEW
+                      </span>
+                    )}
+                    {studio.is_renovated_studio && (
+                      <span className="px-3 py-1 text-xs font-medium bg-blue-500 text-white rounded-full">
+                        리뉴얼
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* 오른쪽: 기본 정보 - Enhanced with gradient */}
+            <div className="bg-gradient-to-br from-white to-orange-50/30 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-4 sm:p-6 border border-orange-100/50">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                {studio.name}
+              </h1>
+              <p className="text-base sm:text-lg text-gray-600 mb-4">
+                {studio.sido} {studio.gugun}
+              </p>
+              {/* 상세 정보 */}
+              <div className="space-y-4 mb-6">
+                {studio.address && (
+                  <div className="flex items-start">
+                    <span className="text-gray-500 w-24 flex-shrink-0">
+                      주소
+                    </span>
+                    <span className="text-gray-900">{studio.address}</span>
+                  </div>
+                )}
+
+                {(studio.subway_line || studio.subway_name) && (
+                  <div className="flex items-start">
+                    <span className="text-gray-500 w-24 flex-shrink-0">
+                      지하철
+                    </span>
+                    <span className="text-gray-900">
+                      {studio.subway_line && `${studio.subway_line} `}
+                      {studio.subway_name}
+                    </span>
+                  </div>
+                )}
+
+                {studio.way_text && (
+                  <div className="flex items-start">
+                    <span className="text-gray-500 w-24 flex-shrink-0">
+                      오시는 길
+                    </span>
+                    <span className="text-gray-900">{studio.way_text}</span>
+                  </div>
+                )}
+
+                {studio.park_limit !== undefined && studio.park_limit > 0 && (
+                  <div className="flex items-start">
+                    <span className="text-gray-500 w-24 flex-shrink-0">
+                      주차
+                    </span>
+                    <span className="text-gray-900">
+                      {studio.park_limit}대 가능
+                      {studio.park_free_hours &&
+                        studio.park_free_hours > 0 &&
+                        ` (${studio.park_free_hours}시간 무료)`}
+                    </span>
+                  </div>
+                )}
+
+                {studio.business_hours && (
+                  <div className="flex items-start">
+                    <span className="text-gray-500 w-24 flex-shrink-0">
+                      영업시간
+                    </span>
+                    <span className="text-gray-900">
+                      {studio.business_hours}
+                    </span>
+                  </div>
+                )}
+
+                {studio.holiday && (
+                  <div className="flex items-start">
+                    <span className="text-gray-500 w-24 flex-shrink-0">
+                      휴무일
+                    </span>
+                    <span className="text-gray-900">{studio.holiday}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* 가격 정보 - Enhanced styling */}
+              {studio.price && (
+                <div className="p-4 bg-gradient-to-r from-orange-50 to-red-50 rounded-lg mb-6 border border-orange-200">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <span className="text-base sm:text-lg font-medium text-gray-900">
+                      기본 가격
+                    </span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-xl sm:text-2xl font-bold text-[#FB6541]">
+                        {studio.price.toLocaleString()}
+                      </span>
+                      <span className="text-sm text-gray-600">원</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 편의시설 - Icon-based design */}
+              {studio.studio_amenities_info && (
+                <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-3">
+                    편의시설
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {studio.studio_amenities_info.has_parking && (
+                      <div className="flex items-center gap-3 p-2 rounded-lg transition-all duration-200 bg-white border border-gray-200 hover:border-orange-200 hover:shadow-sm">
+                        <div className="p-2 rounded-lg bg-orange-100">
+                          <svg
+                            className="w-5 h-5 text-[#FB6541]"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                        </div>
+                        <span className="text-sm sm:text-base text-gray-700">주차장</span>
+                      </div>
+                    )}
+                    {studio.studio_amenities_info.has_hair_makeup_onsite && (
+                      <div className="flex items-center gap-3 p-2 rounded-lg transition-all duration-200 bg-white border border-gray-200 hover:border-orange-200 hover:shadow-sm">
+                        <div className="p-2 rounded-lg bg-orange-100">
+                          <svg
+                            className="w-5 h-5 text-[#FB6541]"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                        </div>
+                        <span className="text-sm sm:text-base text-gray-700">헤어/메이크업</span>
+                      </div>
+                    )}
+                    {studio.studio_amenities_info.has_pet_photography && (
+                      <div className="flex items-center gap-3 p-2 rounded-lg transition-all duration-200 bg-white border border-gray-200 hover:border-orange-200 hover:shadow-sm">
+                        <div className="p-2 rounded-lg bg-orange-100">
+                          <svg
+                            className="w-5 h-5 text-[#FB6541]"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                        </div>
+                        <span className="text-sm sm:text-base text-gray-700">펫 촬영</span>
+                      </div>
+                    )}
+                    {studio.studio_amenities_info
+                      .has_photographer_selection && (
+                      <div className="flex items-center gap-3 p-2 rounded-lg transition-all duration-200 bg-white border border-gray-200 hover:border-orange-200 hover:shadow-sm">
+                        <div className="p-2 rounded-lg bg-orange-100">
+                          <svg
+                            className="w-5 h-5 text-[#FB6541]"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                        </div>
+                        <span className="text-sm sm:text-base text-gray-700">작가 선택</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* 해시태그 - Enhanced hover effects */}
+              {studio.hashtags && studio.hashtags.length > 0 && (
+                <div className="mt-6 pt-6 border-t border-gray-200">
+                  <div className="flex flex-wrap gap-2">
+                    {studio.hashtags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 text-xs sm:text-sm bg-orange-50 text-orange-700 rounded-full hover:bg-orange-100 transition-colors cursor-pointer border border-orange-200"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* 촬영 스타일 및 추가 정보 - 한 컨테이너에 통합 */}
+          {(studio.shooting_styles ||
+            studio.studio_type ||
+            studio.scene_types) && (
+            <div className="mt-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
+                스튜디오 정보
+              </h2>
+              <div className="bg-gradient-to-br from-white to-gray-50/50 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-4 sm:p-6 border border-gray-100">
+                {/* 촬영 스타일 */}
+                {studio.shooting_styles && (
+                  <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                      촬영 스타일
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {studio.shooting_styles.split(",").map((style, index) => (
+                        <span
+                          key={index}
+                          className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm bg-orange-50 text-orange-700 rounded-full border border-orange-200 hover:bg-orange-100 transition-colors cursor-pointer"
+                        >
+                          {style.trim()}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 스튜디오 유형 */}
+                {studio.studio_type && (
+                  <div
+                    className={
+                      studio.shooting_styles
+                        ? "pt-6 border-t border-gray-200"
+                        : ""
+                    }
+                  >
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                      스튜디오 유형
+                    </h3>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      {studio.studio_type.split(",").map((type, index) => (
+                        <div key={index} className="flex items-center gap-2 p-2 rounded-lg hover:bg-orange-50 transition-colors">
+                          <svg
+                            className="w-5 h-5 text-[#FB6541]"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                          <span className="text-sm sm:text-base text-gray-700">{type.trim()}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 장면 유형 */}
+                {studio.scene_types && (
+                  <div
+                    className={
+                      studio.shooting_styles || studio.studio_type
+                        ? "pt-6 border-t border-gray-200"
+                        : ""
+                    }
+                  >
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                      장면 유형
+                    </h3>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      {studio.scene_types.split(",").map((scene, index) => (
+                        <div key={index} className="flex items-center gap-2 p-2 rounded-lg hover:bg-orange-50 transition-colors">
+                          <svg
+                            className="w-5 h-5 text-[#FB6541]"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                          <span className="text-sm sm:text-base text-gray-700">{scene.trim()}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* AI 리뷰 섹션 */}
+          <div className="mt-8">
+            <AIReviewSection
+              aiReviews={studio.ai_reviews}
+              aiScoreSummary={studio.ai_score_summary}
+            />
+          </div>
+
+          {/* 패키지 정보 섹션 - 개선된 디자인 */}
+          {packages && packages.length > 0 && (
+            <div className="mt-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
+                촬영 패키지
+              </h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {packages.map((pkg) => (
+                  <div
+                    key={pkg.id}
+                    className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow"
+                  >
+                    {/* 패키지 헤더 */}
+                    <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-4 sm:p-6">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h3 className="text-xl font-bold text-white mb-2">
+                            {pkg.name}
+                          </h3>
+                          {pkg.description && (
+                            <p className="text-orange-100 text-xs sm:text-sm line-clamp-2">
+                              {pkg.description}
+                            </p>
+                          )}
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xs text-orange-200 mb-1">
+                            패키지 가격
+                          </p>
+                          <p className="text-2xl font-bold text-white">
+                            {(pkg.price / 10000).toFixed(0)}만원
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 패키지 상세 정보 */}
+                    <div className="p-4 sm:p-6">
+                      {/* 주요 정보 */}
+                      <div className="space-y-4 mb-6">
+                        {pkg.shooting_schedule && (
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <svg
+                                className="w-5 h-5 text-[#FB6541]"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                />
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-500">촬영 일정</p>
+                              <p className="text-sm font-medium text-gray-900">
+                                {pkg.shooting_schedule}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+
+                        {pkg.shooting_duration && (
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <svg
+                                className="w-5 h-5 text-[#FB6541]"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-500">촬영 시간</p>
+                              <p className="text-sm font-medium text-gray-900">
+                                {pkg.shooting_duration}분
+                              </p>
+                            </div>
+                          </div>
+                        )}
+
+                        {pkg.shooting_styles && (
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <svg
+                                className="w-5 h-5 text-[#FB6541]"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                                />
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                                />
+                              </svg>
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-xs text-gray-500 mb-1">
+                                촬영 스타일
+                              </p>
+                              <div className="flex flex-wrap gap-1">
+                                {pkg.shooting_styles
+                                  .split(",")
+                                  .map((style, idx) => (
+                                    <span
+                                      key={idx}
+                                      className="px-2 py-1 text-xs bg-orange-50 text-orange-700 rounded-full hover:bg-orange-100 transition-colors"
+                                    >
+                                      {style.trim()}
+                                    </span>
+                                  ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {pkg.studio_types && (
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <svg
+                                className="w-5 h-5 text-[#FB6541]"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                                />
+                              </svg>
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-xs text-gray-500 mb-1">
+                                스튜디오 타입
+                              </p>
+                              <div className="flex flex-wrap gap-1">
+                                {pkg.studio_types
+                                  .split(",")
+                                  .map((type, idx) => (
+                                    <span
+                                      key={idx}
+                                      className="px-2 py-1 text-xs bg-orange-50 text-orange-700 rounded-full hover:bg-orange-100 transition-colors"
+                                    >
+                                      {type.trim()}
+                                    </span>
+                                  ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {pkg.costume_description && (
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <svg
+                                className="w-5 h-5 text-[#FB6541]"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                                />
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-500">의상</p>
+                              <p className="text-sm font-medium text-gray-900">
+                                {pkg.costume_description}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 추가 옵션 */}
+                      {pkg.additional_costs &&
+                        pkg.additional_costs.length > 0 && (
+                          <div className="pt-4 border-t border-gray-200">
+                            <div className="flex items-center gap-2 mb-3">
+                              <svg
+                                className="w-4 h-4 text-gray-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                />
+                              </svg>
+                              <p className="text-sm font-semibold text-gray-700">
+                                추가 옵션
+                              </p>
+                            </div>
+                            <div className="space-y-2">
+                              {pkg.additional_costs.map((cost) => (
+                                <div
+                                  key={cost.id}
+                                  className="flex items-center justify-between p-2 bg-gray-50 rounded-lg"
+                                >
+                                  <div className="flex-1">
+                                    <p className="text-sm font-medium text-gray-700">
+                                      {cost.cost_name}
+                                    </p>
+                                    {cost.description && (
+                                      <p className="text-xs text-gray-500 mt-1">
+                                        {cost.description}
+                                      </p>
+                                    )}
+                                  </div>
+                                  <div className="text-right">
+                                    <p className="text-sm font-semibold text-[#FB6541]">
+                                      +{cost.price.toLocaleString()}원
+                                    </p>
+                                    {cost.price_text && (
+                                      <p className="text-xs text-gray-500">
+                                        {cost.price_text}
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 화보 갤러리 - 패키지 아래 배치 */}
+          {studio.image_urls && studio.image_urls.length > 1 && (
+            <div className="mt-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
+                스튜디오 화보
+              </h2>
+              <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-4 sm:p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {studio.image_urls.slice(1).map((imageUrl, index) => (
+                    <div
+                      key={index}
+                      className="aspect-square overflow-hidden rounded-lg bg-gray-100 cursor-pointer group"
+                    >
+                      <img
+                        src={imageUrl}
+                        alt={`${studio.name} 화보 ${index + 1}`}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 블로그 리뷰 섹션 */}
+          <div className="mt-8">
+            <BlogReviewSection blogs={studio.blogs} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function StudioDetailPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gray-50">
+          <Header />
+          <div className="pt-20">
+            <div className="min-h-[60vh] flex items-center justify-center">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#7B61FF]"></div>
+              <p className="ml-4 text-gray-600">
+                스튜디오 정보를 불러오는 중...
+              </p>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <StudioDetailContent />
+    </Suspense>
+  );
+}

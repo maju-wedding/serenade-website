@@ -35,6 +35,7 @@ jobs:
         run: npm run build
         env:
           NODE_ENV: production
+          NEXT_PUBLIC_API_URL: https://serenade.primadonnadev.site/api/v1
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
