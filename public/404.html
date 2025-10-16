@@ -60,37 +60,21 @@
     </div>
 
     <script>
-        // Get the current path
-        var currentPath = window.location.pathname;
+        // Store the current path for the main app to handle
+        var originalPath = window.location.pathname;
+        console.log('404 page handling path:', originalPath);
         
-        // Check if this is a dynamic route that needs special handling
-        var dynamicRoutes = [
-            '/studio-detail/',
-            '/wedding-hall-detail/',
-            '/magazine-detail/',
-            '/curation-detail/'
-        ];
-        
-        var isDynamicRoute = false;
-        for (var i = 0; i < dynamicRoutes.length; i++) {
-            if (currentPath.indexOf(dynamicRoutes[i]) === 0) {
-                isDynamicRoute = true;
-                break;
-            }
+        // Store the path in sessionStorage so the main app can use it
+        if (window.sessionStorage) {
+            window.sessionStorage.setItem('redirectPath', originalPath);
         }
         
-        if (isDynamicRoute) {
-            // For dynamic routes, redirect to the main app with the path as a hash
-            // This allows the main app to handle the routing client-side
-            var newUrl = '/#' + currentPath;
-            console.log('Redirecting dynamic route to:', newUrl);
-            window.location.replace(newUrl);
-        } else {
-            // For other 404s, redirect to home page after a delay
-            setTimeout(function() {
-                window.location.replace('/');
-            }, 2000);
-        }
+        // Always redirect to the main app, let it handle the routing
+        var baseUrl = window.location.origin;
+        var redirectUrl = baseUrl + '/?redirect=' + encodeURIComponent(originalPath);
+        
+        console.log('Redirecting to:', redirectUrl);
+        window.location.replace(redirectUrl);
     </script>
 </body>
 </html>

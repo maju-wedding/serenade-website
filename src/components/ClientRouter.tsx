@@ -7,6 +7,26 @@ export function ClientRouter() {
   const router = useRouter();
 
   useEffect(() => {
+    // Check for redirect parameter from 404 page
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectPath = urlParams.get('redirect');
+    
+    if (redirectPath) {
+      console.log('Redirecting from 404 to:', redirectPath);
+      // Clean the URL and navigate to the actual route
+      router.replace(redirectPath);
+      return;
+    }
+
+    // Check sessionStorage for redirect path
+    const storedPath = window.sessionStorage?.getItem('redirectPath');
+    if (storedPath && storedPath !== '/') {
+      console.log('Redirecting from stored path:', storedPath);
+      window.sessionStorage.removeItem('redirectPath');
+      router.replace(storedPath);
+      return;
+    }
+
     // Check if there's a hash route that needs to be handled
     const handleHashRoute = () => {
       const hash = window.location.hash;
