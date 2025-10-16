@@ -32,10 +32,7 @@ jobs:
         run: npm run lint
 
       - name: Build application
-        run: npm run build
-        env:
-          NODE_ENV: development
-          NEXT_PUBLIC_API_URL: https://serenade-dev.primadonnadev.site/api/v1
+        run: npm run build:dev
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
