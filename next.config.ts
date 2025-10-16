@@ -2,7 +2,7 @@
 const nextConfig = {
   trailingSlash: true, // SEO용 슬래시
   images: {
-    unoptimized: true, // CDN 없이 이미지 최적화 비활성화
+    unoptimized: true, // CDN 최적화 비활성화
   },
   assetPrefix:
     process.env.DEPLOY_ENV === "production"
