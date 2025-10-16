@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "build:dev": "NODE_ENV=production DEPLOY_ENV=development NEXT_PUBLIC_API_URL=https://serenade-dev.primadonnadev.site/api/v1 next build",
+    "build:dev": "NODE_ENV=production DEPLOY_ENV=development NEXT_PUBLIC_API_URL=https://serenade.primadonnadev.site/api/v1 next build",
     "start": "next start",
     "lint": "next lint",
     "deploy": "npm run build && ./scripts/deploy-to-s3.sh",
