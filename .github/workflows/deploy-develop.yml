@@ -36,7 +36,7 @@ jobs:
         env:
           NODE_ENV: production
           DEPLOY_ENV: development
-          NEXT_PUBLIC_API_URL: https://serenade-dev.primadonnadev.site/api/v1
+          NEXT_PUBLIC_API_URL: https://serenade.primadonnadev.site/api/v1
           NEXT_PUBLIC_KAKAO_MAP_APP_KEY: f4ffa4fd46fb12d2e4df177abf87f4e2
 
       - name: Configure AWS credentials
