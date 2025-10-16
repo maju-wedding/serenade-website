@@ -34,7 +34,9 @@ jobs:
       - name: Build application
         run: npm run build:dev
         env:
-          NEXT_PUBLIC_DEV_DOMAIN: ${{ vars.DEV_DOMAIN || '' }}
+          NODE_ENV: development
+          NEXT_PUBLIC_API_URL: https://serenade.primadonnadev.site/api/v1
+          NEXT_PUBLIC_KAKAO_MAP_APP_KEY: f4ffa4fd46fb12d2e4df177abf87f4e2
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
