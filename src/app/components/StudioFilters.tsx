@@ -27,7 +27,6 @@ export function StudioFilters({
   selectedSido,
   setSelectedSido,
   selectedGuguns,
-  setSelectedGuguns,
   selectedPriceRanges,
   setSelectedPriceRanges,
   selectedShootingStyles,

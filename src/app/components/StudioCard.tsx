@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { studioService } from "@/services/api";
 import { ImageGallery } from "./ImageGallery";
 import Link from "next/link";
@@ -32,14 +32,7 @@ export function StudioCard({ studio }: StudioProps) {
   const [loading, setLoading] = useState(!studio.packages);
   const [showAllPackages, setShowAllPackages] = useState(false);
 
-  useEffect(() => {
-    // 패키지 데이터가 없고 studio.packages가 없는 경우에만 로드
-    if (!studio.packages && studio.id) {
-      loadPackages();
-    }
-  }, [studio.id]);
-
-  const loadPackages = async () => {
+  const loadPackages = useCallback(async () => {
     try {
       const response = await studioService.getPackages(studio.id.toString());
       if (Array.isArray(response)) {
@@ -50,7 +43,14 @@ export function StudioCard({ studio }: StudioProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [studio.id]);
+
+  useEffect(() => {
+    // 패키지 데이터가 없고 studio.packages가 없는 경우에만 로드
+    if (!studio.packages && studio.id) {
+      loadPackages();
+    }
+  }, [studio.id, studio.packages, loadPackages]);
 
   // 더보기/접기 클릭 처리 (이벤트 전파 방지)
   const handleTogglePackages = (e: React.MouseEvent) => {

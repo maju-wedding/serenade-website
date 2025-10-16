@@ -263,7 +263,7 @@ export function Features() {
           setHasInitialAnimated(true);
         }, 100);
       }
-    }, [isInView, hasInitialAnimated]);
+    }, [hasInitialAnimated]);
 
     // 초기 로드 애니메이션 스타일 (처음 한 번만)
     const getInitialAnimationStyle = (delay: string = "0s") => ({

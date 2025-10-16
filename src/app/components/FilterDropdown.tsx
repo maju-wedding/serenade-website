@@ -62,23 +62,7 @@ export function FilterDropdown({
 
   const hasSelection = selectedValues.length > 0;
   
-  // Theme-based colors
-  const colors = {
-    wedding: {
-      border: '#FB6541',
-      ring: '#FB6541',
-      bg: '#FB6541',
-      text: '#FB6541'
-    },
-    studio: {
-      border: 'rgb(147 51 234)', // purple-600
-      ring: 'rgb(147 51 234)',
-      bg: 'rgb(147 51 234)',
-      text: 'rgb(147 51 234)'
-    }
-  };
   
-  const themeColors = colors[theme];
 
   return (
     <div className="relative" ref={dropdownRef}>

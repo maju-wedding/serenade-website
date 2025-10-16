@@ -5,14 +5,14 @@ interface PaginationProps {
   theme?: 'wedding' | 'studio';
 }
 
-export function Pagination({ currentPage, totalPages, onPageChange, theme = 'wedding' }: PaginationProps) {
+export function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
   // 표시할 페이지 번호 계산
   const getPageNumbers = () => {
     const pages = [];
     const maxVisible = 5; // 최대 표시 페이지 수
     
     let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-    let end = Math.min(totalPages, start + maxVisible - 1);
+    const end = Math.min(totalPages, start + maxVisible - 1);
     
     if (end - start + 1 < maxVisible) {
       start = Math.max(1, end - maxVisible + 1);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { weddingHallService } from "@/services/api";
 import { ImageGallery } from "./ImageGallery";
 import Link from "next/link";
@@ -51,22 +51,7 @@ export function WeddingHallCard({ hall }: WeddingHallProps) {
   const [loading, setLoading] = useState(true);
   const [showAllHalls, setShowAllHalls] = useState(false);
 
-  useEffect(() => {
-    console.log('WeddingHallCard - hall prop:', hall);
-    console.log('WeddingHallCard - hall.halls:', hall.halls);
-    
-    // hall.halls가 이미 있으면 사용, 없으면 API 호출
-    if (hall.halls && hall.halls.length > 0) {
-      setHalls(hall.halls);
-      setLoading(false);
-    } else if (hall.id) {
-      loadHalls();
-    } else {
-      setLoading(false);
-    }
-  }, [hall.id]);
-
-  const loadHalls = async () => {
+  const loadHalls = useCallback(async () => {
     try {
       const response = await weddingHallService.getDetail(hall.id.toString());
       console.log('Wedding Hall Detail Response:', response);
@@ -154,7 +139,22 @@ export function WeddingHallCard({ hall }: WeddingHallProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [hall.id]);
+
+  useEffect(() => {
+    console.log('WeddingHallCard - hall prop:', hall);
+    console.log('WeddingHallCard - hall.halls:', hall.halls);
+    
+    // hall.halls가 이미 있으면 사용, 없으면 API 호출
+    if (hall.halls && hall.halls.length > 0) {
+      setHalls(hall.halls);
+      setLoading(false);
+    } else if (hall.id) {
+      loadHalls();
+    } else {
+      setLoading(false);
+    }
+  }, [hall, loadHalls]);
 
   // 더보기/접기 클릭 처리 (이벤트 전파 방지)
   const handleToggleHalls = (e: React.MouseEvent) => {

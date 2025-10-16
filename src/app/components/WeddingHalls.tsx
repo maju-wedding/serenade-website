@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { weddingHallService } from "@/services/api";
 import { Pagination } from "./Pagination";
 import { WeddingHallFilters } from "./WeddingHallFilters";
 import { WeddingHallSkeleton } from "./WeddingHallSkeleton";
 import { WeddingHallCard } from "./WeddingHallCard";
-import Link from "next/link";
-import { ImageGallery } from "./ImageGallery";
 
 interface Hall {
   id: number;
@@ -88,23 +86,7 @@ export function WeddingHalls() {
     selectedHallStyles,
   ]);
 
-  // 데이터 로드
-  useEffect(() => {
-    loadWeddingHalls();
-  }, [
-    currentPage,
-    selectedSido,
-    selectedGuguns,
-    selectedGuestCounts,
-    selectedWeddingTypes,
-    selectedHallTypes,
-    selectedRentalCostRanges,
-    selectedFoodCostRanges,
-    selectedFoodMenus,
-    selectedHallStyles,
-  ]);
-
-  const loadWeddingHalls = async () => {
+  const loadWeddingHalls = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -180,7 +162,23 @@ export function WeddingHalls() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [
+    currentPage,
+    selectedSido,
+    selectedGuguns,
+    selectedGuestCounts,
+    selectedWeddingTypes,
+    selectedHallTypes,
+    selectedRentalCostRanges,
+    selectedFoodCostRanges,
+    selectedFoodMenus,
+    selectedHallStyles,
+  ]);
+
+  // 데이터 로드
+  useEffect(() => {
+    loadWeddingHalls();
+  }, [loadWeddingHalls]);
 
   const resetFilters = () => {
     setSelectedSido("");

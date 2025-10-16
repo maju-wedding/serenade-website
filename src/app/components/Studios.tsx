@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { studioService } from "@/services/api";
 import { Pagination } from "./Pagination";
 import { StudioFilters } from "./StudioFilters";
@@ -61,20 +61,7 @@ export function Studios() {
     selectedSceneTypes,
   ]);
 
-  // 데이터 로드
-  useEffect(() => {
-    loadStudios();
-  }, [
-    currentPage,
-    selectedSido,
-    selectedGuguns,
-    selectedPriceRanges,
-    selectedShootingStyles,
-    selectedShootingTypes,
-    selectedSceneTypes,
-  ]);
-
-  const loadStudios = async () => {
+  const loadStudios = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -128,7 +115,20 @@ export function Studios() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [
+    currentPage,
+    selectedSido,
+    selectedGuguns,
+    selectedPriceRanges,
+    selectedShootingStyles,
+    selectedShootingTypes,
+    selectedSceneTypes,
+  ]);
+
+  // 데이터 로드
+  useEffect(() => {
+    loadStudios();
+  }, [loadStudios]);
 
   const resetFilters = () => {
     setSelectedSido("");
