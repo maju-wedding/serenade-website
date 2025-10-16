@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serenade Wedding - 페이지 로딩 중</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .loading-container {
+            text-align: center;
+            padding: 2rem;
+        }
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        p {
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+        .error-info {
+            font-size: 0.875rem;
+            opacity: 0.7;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <div class="spinner"></div>
+        <h1>페이지를 로딩하고 있습니다</h1>
+        <p>잠시만 기다려주세요...</p>
+        <div class="error-info">
+            페이지 리디렉션 중입니다
+        </div>
+    </div>
+
+    <script>
+        // Get the current path
+        var currentPath = window.location.pathname;
+        
+        // Check if this is a dynamic route that needs special handling
+        var dynamicRoutes = [
+            '/studio-detail/',
+            '/wedding-hall-detail/',
+            '/magazine-detail/',
+            '/curation-detail/'
+        ];
+        
+        var isDynamicRoute = false;
+        for (var i = 0; i < dynamicRoutes.length; i++) {
+            if (currentPath.indexOf(dynamicRoutes[i]) === 0) {
+                isDynamicRoute = true;
+                break;
+            }
+        }
+        
+        if (isDynamicRoute) {
+            // For dynamic routes, redirect to the main app with the path as a hash
+            // This allows the main app to handle the routing client-side
+            var newUrl = '/#' + currentPath;
+            console.log('Redirecting dynamic route to:', newUrl);
+            window.location.replace(newUrl);
+        } else {
+            // For other 404s, redirect to home page after a delay
+            setTimeout(function() {
+                window.location.replace('/');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
