@@ -199,7 +199,7 @@ export function IntegratedMagazineSections() {
   const renderCurationCard = (content: ContentItem) => (
     <Link
       key={content.id}
-      href={`/curation-detail?id=${content.id}`}
+      href={`/curation-detail/${content.id}`}
       className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 group cursor-pointer flex flex-col"
     >
       <div className="relative h-64 bg-gray-100 overflow-hidden">
@@ -337,7 +337,7 @@ export function IntegratedMagazineSections() {
   const renderMagazineCard = (content: ContentItem) => (
     <Link
       key={content.id}
-      href={`/magazine-detail?id=${content.id}`}
+      href={`/magazine-detail/${content.id}`}
       className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 group cursor-pointer flex flex-col"
     >
       <div className="relative h-64 bg-gray-100 overflow-hidden">

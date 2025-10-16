@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { magazineService } from "@/services/api";
 import Image from "next/image";
-import { Header } from "../components/Header";
-import { Footer } from "../components/Footer";
+import { Header } from "../../components/Header";
+import { Footer } from "../../components/Footer";
 
 interface Magazine {
   id: number;
@@ -17,9 +17,9 @@ interface Magazine {
 }
 
 function MagazineDetailContent() {
-  const searchParams = useSearchParams();
+  const params = useParams();
   const router = useRouter();
-  const magazineId = searchParams.get("id");
+  const magazineId = params.id as string;
   
   const [magazine, setMagazine] = useState<Magazine | null>(null);
   const [loading, setLoading] = useState(true);
@@ -193,3 +193,4 @@ export default function MagazineDetailPage() {
     </Suspense>
   );
 }
+

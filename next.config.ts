@@ -1,9 +1,8 @@
 /** @type {import("next").NextConfig} */
 const nextConfig = {
-  output: "export", // 정적 사이트 생성
   trailingSlash: true, // SEO용 슬래시
   images: {
-    unoptimized: true, // 정적 export용
+    unoptimized: true, // CDN 없이 이미지 최적화 비활성화
   },
   assetPrefix:
     process.env.DEPLOY_ENV === "production"

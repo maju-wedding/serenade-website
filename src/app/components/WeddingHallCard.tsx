@@ -173,7 +173,7 @@ export function WeddingHallCard({ hall }: WeddingHallProps) {
 
   return (
     <Link
-      href={`/wedding-hall-detail?id=${hall.id}`}
+      href={`/wedding-hall-detail/${hall.id}`}
       className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 block h-full flex flex-col"
     >
       {/* 이미지 갤러리 */}

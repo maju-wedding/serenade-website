@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { studioService } from "@/services/api";
 import Link from "next/link";
-import { Header } from "../components/Header";
+import { Header } from "../../components/Header";
 import { AIReviewSection } from "@/components/AIReviewSection";
 import { BlogReviewSection } from "@/components/BlogReviewSection";
-import { KakaoMap } from "../components/KakaoMap";
-import { SideNavigation } from "../components/SideNavigation";
+import { KakaoMap } from "../../components/KakaoMap";
+import { SideNavigation } from "../../components/SideNavigation";
 
 interface AdditionalCost {
   id: number;
@@ -115,8 +115,8 @@ interface StudioDetail {
 }
 
 function StudioDetailContent() {
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id");
+  const params = useParams();
+  const id = params.id as string;
   const [studio, setStudio] = useState<StudioDetail | null>(null);
   const [packages, setPackages] = useState<StudioPackage[]>([]);
   const [loading, setLoading] = useState(true);
@@ -1072,3 +1072,4 @@ export default function StudioDetailPage() {
     </Suspense>
   );
 }
+

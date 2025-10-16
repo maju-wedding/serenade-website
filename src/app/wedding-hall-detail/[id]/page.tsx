@@ -1,15 +1,15 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { weddingHallService } from "@/services/api";
-import { ImageGallery } from "../components/ImageGallery";
+import { ImageGallery } from "../../components/ImageGallery";
 import Link from "next/link";
-import { Header } from "../components/Header";
+import { Header } from "../../components/Header";
 import { AIReviewSection } from "@/components/AIReviewSection";
 import { BlogReviewSection } from "@/components/BlogReviewSection";
-import { KakaoMap } from "../components/KakaoMap";
-import { SideNavigation } from "../components/SideNavigation";
+import { KakaoMap } from "../../components/KakaoMap";
+import { SideNavigation } from "../../components/SideNavigation";
 
 interface VenueAmenitiesInfo {
   has_bride_room?: boolean;
@@ -126,8 +126,8 @@ interface WeddingHallDetail {
 }
 
 function WeddingHallDetailContent() {
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id");
+  const params = useParams();
+  const id = params.id as string;
   const [hall, setHall] = useState<WeddingHallDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -1127,3 +1127,4 @@ export default function WeddingHallDetailPage() {
     </Suspense>
   );
 }
+

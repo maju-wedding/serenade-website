@@ -1,9 +1,9 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { Header } from "../components/Header";
-import { Footer } from "../components/Footer";
+import { useParams } from "next/navigation";
+import { Header } from "../../components/Header";
+import { Footer } from "../../components/Footer";
 import { curationService } from "@/services/api";
 import Image from "next/image";
 import Link from "next/link";
@@ -41,8 +41,8 @@ interface Curation {
 }
 
 function CurationDetailContent() {
-  const searchParams = useSearchParams();
-  const curationId = searchParams.get("id");
+  const params = useParams();
+  const curationId = params.id as string;
   const [curation, setCuration] = useState<Curation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -381,3 +381,4 @@ export default function CurationDetailPage() {
     </div>
   );
 }
+

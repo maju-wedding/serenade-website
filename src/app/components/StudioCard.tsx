@@ -61,7 +61,7 @@ export function StudioCard({ studio }: StudioProps) {
 
   return (
     <Link
-      href={`/studio-detail?id=${studio.id}`}
+      href={`/studio-detail/${studio.id}`}
       className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 block h-full flex flex-col"
     >
       {/* 이미지 갤러리 */}
