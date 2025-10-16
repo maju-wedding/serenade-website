@@ -8,6 +8,8 @@ import Link from "next/link";
 import { Header } from "../components/Header";
 import { AIReviewSection } from "@/components/AIReviewSection";
 import { BlogReviewSection } from "@/components/BlogReviewSection";
+import { KakaoMap } from "../components/KakaoMap";
+import { SideNavigation } from "../components/SideNavigation";
 
 interface VenueAmenitiesInfo {
   has_bride_room?: boolean;
@@ -196,9 +198,149 @@ function WeddingHallDetailContent() {
     );
   }
 
+  // 사이드바 섹션 정의
+  const navSections = [
+    {
+      id: "basic-info",
+      label: "기본 정보",
+      icon: (
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      ),
+    },
+  ];
+
+  if (hall.ai_reviews && hall.ai_reviews.length > 0) {
+    navSections.push({
+      id: "ai-reviews",
+      label: "AI 리뷰",
+      icon: (
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+          />
+        </svg>
+      ),
+    });
+  }
+
+  if (hall.venues && hall.venues.length > 0) {
+    navSections.push({
+      id: "venue-info",
+      label: "홀 정보",
+      icon: (
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+          />
+        </svg>
+      ),
+    });
+  }
+
+  if (hall.common_image_urls && hall.common_image_urls.length > 0) {
+    navSections.push({
+      id: "common-space",
+      label: "공용 공간",
+      icon: (
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
+        </svg>
+      ),
+    });
+  }
+
+  if (hall.blogs && hall.blogs.length > 0) {
+    navSections.push({
+      id: "blog-reviews",
+      label: "블로그 리뷰",
+      icon: (
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+          />
+        </svg>
+      ),
+    });
+  }
+
+  if (hall.address) {
+    navSections.push({
+      id: "location",
+      label: "오시는 길",
+      icon: (
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+          />
+        </svg>
+      ),
+    });
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
+      <SideNavigation sections={navSections} />
 
       {/* 메인 콘텐츠 - Header 높이만큼 여백 추가 */}
       <div className="pt-20">
@@ -229,7 +371,10 @@ function WeddingHallDetailContent() {
 
         {/* 상세 콘텐츠 */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div
+            id="basic-info"
+            className="grid grid-cols-1 lg:grid-cols-2 gap-8"
+          >
             {/* 이미지 갤러리 */}
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
               <div className="h-[500px] relative">
@@ -269,7 +414,9 @@ function WeddingHallDetailContent() {
                     <span className="text-gray-500 w-full sm:w-24 flex-shrink-0 mb-1 sm:mb-0 text-sm sm:text-base font-medium">
                       주소
                     </span>
-                    <span className="text-gray-900 text-sm sm:text-base">{hall.address}</span>
+                    <span className="text-gray-900 text-sm sm:text-base">
+                      {hall.address}
+                    </span>
                   </div>
                 )}
 
@@ -345,8 +492,18 @@ function WeddingHallDetailContent() {
               {hall.hall_amenities_info && (
                 <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
                   <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center">
-                    <svg className="w-4 h-4 mr-2 text-[#FB6541]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    <svg
+                      className="w-4 h-4 mr-2 text-[#FB6541]"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                      />
                     </svg>
                     편의시설
                   </h3>
@@ -360,12 +517,14 @@ function WeddingHallDetailContent() {
                           : "bg-gray-100 text-gray-400 opacity-60"
                       }`}
                     >
-                      <div className={`p-2 rounded-lg ${
-                        hall.hall_amenities_info.elevator_count &&
-                        hall.hall_amenities_info.elevator_count > 0
-                          ? "bg-orange-100"
-                          : "bg-gray-200"
-                      }`}>
+                      <div
+                        className={`p-2 rounded-lg ${
+                          hall.hall_amenities_info.elevator_count &&
+                          hall.hall_amenities_info.elevator_count > 0
+                            ? "bg-orange-100"
+                            : "bg-gray-200"
+                        }`}
+                      >
                         <svg
                           className={`w-5 h-5 ${
                             hall.hall_amenities_info.elevator_count &&
@@ -404,12 +563,14 @@ function WeddingHallDetailContent() {
                           : "bg-gray-100 text-gray-400 opacity-60"
                       }`}
                     >
-                      <div className={`p-2 rounded-lg ${
-                        hall.hall_amenities_info.atm_count &&
-                        hall.hall_amenities_info.atm_count > 0
-                          ? "bg-orange-100"
-                          : "bg-gray-200"
-                      }`}>
+                      <div
+                        className={`p-2 rounded-lg ${
+                          hall.hall_amenities_info.atm_count &&
+                          hall.hall_amenities_info.atm_count > 0
+                            ? "bg-orange-100"
+                            : "bg-gray-200"
+                        }`}
+                      >
                         <svg
                           className={`w-5 h-5 ${
                             hall.hall_amenities_info.atm_count &&
@@ -447,11 +608,13 @@ function WeddingHallDetailContent() {
                           : "bg-gray-100 text-gray-400 opacity-60"
                       }`}
                     >
-                      <div className={`p-2 rounded-lg ${
-                        hall.hall_amenities_info.has_family_waiting_room
-                          ? "bg-orange-100"
-                          : "bg-gray-200"
-                      }`}>
+                      <div
+                        className={`p-2 rounded-lg ${
+                          hall.hall_amenities_info.has_family_waiting_room
+                            ? "bg-orange-100"
+                            : "bg-gray-200"
+                        }`}
+                      >
                         <svg
                           className={`w-5 h-5 ${
                             hall.hall_amenities_info.has_family_waiting_room
@@ -471,9 +634,11 @@ function WeddingHallDetailContent() {
                         </svg>
                       </div>
                       <div className="text-sm">
-                        <p className="font-medium">가족대기실</p>
+                        <p className="font-medium">혼주대기실</p>
                         <p className="text-xs opacity-75">
-                          {hall.hall_amenities_info.has_family_waiting_room ? "이용 가능" : "없음"}
+                          {hall.hall_amenities_info.has_family_waiting_room
+                            ? "이용 가능"
+                            : "없음"}
                         </p>
                       </div>
                     </div>
@@ -486,11 +651,13 @@ function WeddingHallDetailContent() {
                           : "bg-gray-100 text-gray-400 opacity-60"
                       }`}
                     >
-                      <div className={`p-2 rounded-lg ${
-                        hall.hall_amenities_info.has_pyebaek_room
-                          ? "bg-orange-100"
-                          : "bg-gray-200"
-                      }`}>
+                      <div
+                        className={`p-2 rounded-lg ${
+                          hall.hall_amenities_info.has_pyebaek_room
+                            ? "bg-orange-100"
+                            : "bg-gray-200"
+                        }`}
+                      >
                         <svg
                           className={`w-5 h-5 ${
                             hall.hall_amenities_info.has_pyebaek_room
@@ -512,7 +679,9 @@ function WeddingHallDetailContent() {
                       <div className="text-sm">
                         <p className="font-medium">폐백실</p>
                         <p className="text-xs opacity-75">
-                          {hall.hall_amenities_info.has_pyebaek_room ? "이용 가능" : "없음"}
+                          {hall.hall_amenities_info.has_pyebaek_room
+                            ? "이용 가능"
+                            : "없음"}
                         </p>
                       </div>
                     </div>
@@ -537,7 +706,7 @@ function WeddingHallDetailContent() {
           </div>
 
           {/* AI 리뷰 섹션 */}
-          <div className="mt-8">
+          <div id="ai-reviews" className="mt-8 scroll-mt-24">
             <AIReviewSection
               aiReviews={hall.ai_reviews}
               aiScoreSummary={hall.ai_score_summary}
@@ -546,7 +715,7 @@ function WeddingHallDetailContent() {
 
           {/* 홀별 상세 정보 카드 */}
           {hall.venues && hall.venues.length > 0 && (
-            <div className="mt-8">
+            <div id="venue-info" className="mt-8 scroll-mt-24">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 홀 정보
               </h2>
@@ -844,7 +1013,10 @@ function WeddingHallDetailContent() {
 
           {/* 공용 공간 이미지 셉션 */}
           {hall.common_image_urls && hall.common_image_urls.length > 0 && (
-            <div className="bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden mt-8 border border-gray-100 hover:border-orange-200">
+            <div
+              id="common-space"
+              className="bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden mt-8 border border-gray-100 hover:border-orange-200 scroll-mt-24"
+            >
               <div className="p-6 border-b border-gray-200">
                 <h2 className="text-xl font-semibold text-gray-900">
                   공용 공간
@@ -860,9 +1032,76 @@ function WeddingHallDetailContent() {
           )}
 
           {/* 블로그 리뷰 섹션 */}
-          <div className="mt-8">
+          <div id="blog-reviews" className="mt-8 scroll-mt-24">
             <BlogReviewSection blogs={hall.blogs} />
           </div>
+
+          {/* 카카오맵 섹션 */}
+          {hall.address && (
+            <div id="location" className="mt-8 scroll-mt-24">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
+                오시는 길
+              </h2>
+              <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-4 sm:p-6">
+                <div className="mb-4">
+                  <div className="flex items-start gap-2 mb-2">
+                    <svg
+                      className="w-5 h-5 text-[#FB6541] mt-0.5 flex-shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                    <div>
+                      <p className="font-medium text-gray-900">{hall.name}</p>
+                      <p className="text-sm text-gray-600">{hall.address}</p>
+                    </div>
+                  </div>
+
+                  {(hall.subway_line || hall.subway_name) && (
+                    <div className="flex items-start gap-2 ml-7 mt-2">
+                      <svg
+                        className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 7H6a2 2 0 00-2 2v9a2 2 0 002 2h2m0-18v18m8-18v9m0 0v9m0-9h2a2 2 0 012 2v7a2 2 0 01-2 2h-2"
+                        />
+                      </svg>
+                      <p className="text-sm text-gray-600">
+                        {hall.subway_line && `${hall.subway_line} `}
+                        {hall.subway_name}
+                        {hall.way_text && ` ${hall.way_text}`}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                <KakaoMap
+                  address={hall.address}
+                  name={hall.name}
+                  className="w-full h-[400px] sm:h-[450px]"
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

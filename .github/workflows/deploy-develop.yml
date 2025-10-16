@@ -1,0 +1,123 @@
+name: Deploy Develop to S3
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:  # 수동 실행 가능
+
+env:
+  NODE_VERSION: '18'
+  S3_BUCKET: serenade-dev-website
+  AWS_REGION: ap-northeast-2
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Build application
+        run: npm run build
+        env:
+          NODE_ENV: development
+          NEXT_PUBLIC_API_URL: https://serenade-dev.primadonnadev.site/api/v1
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Deploy to S3
+        run: |
+          echo "🚀 Deploying to S3 bucket: ${{ env.S3_BUCKET }}"
+          
+          # S3 버킷 존재 확인
+          if ! aws s3 ls "s3://${{ env.S3_BUCKET }}" > /dev/null 2>&1; then
+            echo "❌ Cannot access S3 bucket. Please check bucket name and permissions."
+            exit 1
+          fi
+          
+          # 이전 파일 백업
+          TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+          echo "📦 Creating backup..."
+          aws s3 sync "s3://${{ env.S3_BUCKET }}" "s3://${{ env.S3_BUCKET }}-backup-$TIMESTAMP" --quiet || echo "⚠️ Backup failed or no existing files"
+          
+          # 기존 파일 삭제 (clean deploy)
+          echo "🧹 Cleaning existing files..."
+          aws s3 rm "s3://${{ env.S3_BUCKET }}" --recursive --exclude "backup-*"
+          
+          # HTML 파일을 먼저 올리고 Content-Type 명시적 설정
+          echo "📤 Uploading HTML files with correct Content-Type..."
+          find out/ -name "*.html" -type f | while read file; do
+            key="${file#out/}"
+            aws s3 cp "$file" "s3://${{ env.S3_BUCKET }}/$key" \
+              --content-type "text/html; charset=utf-8" \
+              --cache-control "public, max-age=300"
+          done
+          
+          # CSS 파일 업로드
+          echo "📤 Uploading CSS files..."
+          find out/ -name "*.css" -type f | while read file; do
+            key="${file#out/}"
+            aws s3 cp "$file" "s3://${{ env.S3_BUCKET }}/$key" \
+              --content-type "text/css" \
+              --cache-control "public, max-age=31536000, immutable"
+          done
+          
+          # JS 파일 업로드
+          echo "📤 Uploading JS files..."
+          find out/ -name "*.js" -type f | while read file; do
+            key="${file#out/}"
+            aws s3 cp "$file" "s3://${{ env.S3_BUCKET }}/$key" \
+              --content-type "application/javascript" \
+              --cache-control "public, max-age=31536000, immutable"
+          done
+          
+          # 나머지 파일들 업로드
+          echo "📤 Uploading remaining files..."
+          aws s3 sync out/ "s3://${{ env.S3_BUCKET }}" \
+            --exclude "*.html" \
+            --exclude "*.css" \
+            --exclude "*.js" \
+            --exclude "*.DS_Store" \
+            --cache-control "public, max-age=31536000, immutable"
+          
+          echo "✅ Deployment completed successfully!"
+
+      - name: Invalidate CloudFront
+        if: vars.CLOUDFRONT_DISTRIBUTION_ID_DEV != ''
+        run: |
+          echo "🔄 Invalidating CloudFront cache..."
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID_DEV }} \
+            --paths "/*"
+          echo "✅ CloudFront invalidation initiated"
+
+      - name: Deployment Summary
+        run: |
+          echo "🎉 Development Deployment Summary"
+          echo "- S3 Bucket: ${{ env.S3_BUCKET }}"
+          echo "- Region: ${{ env.AWS_REGION }}"
+          echo "- S3 Website URL: http://${{ env.S3_BUCKET }}.s3-website.${{ env.AWS_REGION }}.amazonaws.com"
+          if [ "${{ vars.CLOUDFRONT_DISTRIBUTION_ID_DEV }}" != "" ]; then
+            echo "- Development URL: https://dev.serenade-wedding.com"
+          fi
+          echo "- Commit: ${{ github.sha }}"
+          echo "- Branch: ${{ github.ref_name }}"
