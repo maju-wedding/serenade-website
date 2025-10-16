@@ -7,14 +7,22 @@ export function ClientRouter() {
   const router = useRouter();
 
   useEffect(() => {
-    // Check for redirect parameter from 404 page
+    // Check for path parameter from 404 page  
     const urlParams = new URLSearchParams(window.location.search);
-    const redirectPath = urlParams.get('redirect');
+    const pathParam = urlParams.get('path');
+    const redirectParam = urlParams.get('redirect');
     
-    if (redirectPath) {
-      console.log('Redirecting from 404 to:', redirectPath);
+    if (pathParam) {
+      console.log('Redirecting from 404 path to:', pathParam);
       // Clean the URL and navigate to the actual route
-      router.replace(redirectPath);
+      router.replace(pathParam);
+      return;
+    }
+    
+    if (redirectParam) {
+      console.log('Redirecting from 404 redirect to:', redirectParam);
+      // Clean the URL and navigate to the actual route
+      router.replace(redirectParam);
       return;
     }
 

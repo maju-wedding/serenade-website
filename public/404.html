@@ -64,17 +64,32 @@
         var originalPath = window.location.pathname;
         console.log('404 page handling path:', originalPath);
         
-        // Store the path in sessionStorage so the main app can use it
-        if (window.sessionStorage) {
-            window.sessionStorage.setItem('redirectPath', originalPath);
+        // Check if this is a dynamic route
+        var dynamicRoutes = [
+            '/studio-detail/',
+            '/wedding-hall-detail/',
+            '/magazine-detail/',
+            '/curation-detail/'
+        ];
+        
+        var isDynamicRoute = false;
+        for (var i = 0; i < dynamicRoutes.length; i++) {
+            if (originalPath.indexOf(dynamicRoutes[i]) === 0) {
+                isDynamicRoute = true;
+                break;
+            }
         }
         
-        // Always redirect to the main app, let it handle the routing
-        var baseUrl = window.location.origin;
-        var redirectUrl = baseUrl + '/?redirect=' + encodeURIComponent(originalPath);
-        
-        console.log('Redirecting to:', redirectUrl);
-        window.location.replace(redirectUrl);
+        if (isDynamicRoute) {
+            // For dynamic routes, use immediate redirect to home with path in URL
+            var newUrl = '/?path=' + encodeURIComponent(originalPath);
+            console.log('Dynamic route detected, redirecting to:', newUrl);
+            window.location.replace(newUrl);
+        } else {
+            // For static pages, just redirect to home
+            console.log('Static page 404, redirecting to home');
+            window.location.replace('/');
+        }
     </script>
 </body>
 </html>
