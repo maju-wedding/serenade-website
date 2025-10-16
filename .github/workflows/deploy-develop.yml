@@ -33,6 +33,8 @@ jobs:
 
       - name: Build application
         run: npm run build:dev
+        env:
+          NEXT_PUBLIC_DEV_DOMAIN: ${{ vars.DEV_DOMAIN || '' }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4

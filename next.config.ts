@@ -1,11 +1,16 @@
-/** @type {import('next').NextConfig} */
+/** @type {import("next").NextConfig} */
 const nextConfig = {
-  output: 'export',           // 정적 사이트 생성
-  trailingSlash: true,       // SEO용 슬래시
+  output: "export", // 정적 사이트 생성
+  trailingSlash: true, // SEO용 슬래시
   images: {
-    unoptimized: true        // 정적 export용
+    unoptimized: true, // 정적 export용
   },
-  assetPrefix: process.env.NODE_ENV === 'production' ? 'https://serenade-wedding.com' : '',
-}
+  assetPrefix:
+    process.env.NODE_ENV === "production"
+      ? "https://serenade-wedding.com"
+      : process.env.NODE_ENV === "development"
+        ? "https://dev.serenade-wedding.com"
+        : "",
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
