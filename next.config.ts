@@ -6,9 +6,9 @@ const nextConfig = {
     unoptimized: true, // 정적 export용
   },
   assetPrefix:
-    process.env.NODE_ENV === "production"
+    process.env.DEPLOY_ENV === "production"
       ? "https://serenade-wedding.com"
-      : process.env.NODE_ENV === "development"
+      : process.env.DEPLOY_ENV === "development"
         ? "https://dev.serenade-wedding.com"
         : "",
 };
