@@ -130,6 +130,15 @@ export function WeddingHallDetailClient() {
   
   const getIdFromUrl = () => {
     if (typeof window !== 'undefined') {
+      // First check sessionStorage for original path (from 404 redirect)
+      const originalPath = sessionStorage.getItem('originalPath');
+      if (originalPath) {
+        sessionStorage.removeItem('originalPath'); // Clean up
+        const match = originalPath.match(/\/wedding-hall-detail\/([^\/]+)/);
+        if (match) return match[1];
+      }
+      
+      // Fallback to current URL
       const path = window.location.pathname;
       const match = path.match(/\/wedding-hall-detail\/([^\/]+)/);
       return match ? match[1] : null;

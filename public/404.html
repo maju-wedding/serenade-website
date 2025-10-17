@@ -60,7 +60,7 @@
     </div>
 
     <script>
-        // Store the current path for the main app to handle
+        // Store the current path for debugging
         var originalPath = window.location.pathname;
         console.log('404 page handling path:', originalPath);
         
@@ -73,37 +73,31 @@
         ];
         
         var isDynamicRoute = false;
+        var routeBase = '';
         for (var i = 0; i < dynamicRoutes.length; i++) {
             if (originalPath.indexOf(dynamicRoutes[i]) === 0) {
                 isDynamicRoute = true;
+                routeBase = dynamicRoutes[i];
                 break;
             }
         }
         
         if (isDynamicRoute) {
-            // For dynamic routes, redirect to the appropriate fallback page
-            var fallbackPath = '';
-            if (originalPath.indexOf('/studio-detail/') === 0) {
-                fallbackPath = '/studio-detail/next-static-fallback/index.html';
-            } else if (originalPath.indexOf('/wedding-hall-detail/') === 0) {
-                fallbackPath = '/wedding-hall-detail/next-static-fallback/index.html';
-            } else if (originalPath.indexOf('/magazine-detail/') === 0) {
-                fallbackPath = '/magazine-detail/next-static-fallback/index.html';
-            } else if (originalPath.indexOf('/curation-detail/') === 0) {
-                fallbackPath = '/curation-detail/next-static-fallback/index.html';
+            // Store the original path in sessionStorage for the client to pick up
+            if (typeof(Storage) !== "undefined") {
+                sessionStorage.setItem('originalPath', originalPath);
             }
             
-            if (fallbackPath) {
-                console.log('Dynamic route detected, redirecting to fallback:', fallbackPath);
-                window.location.replace(fallbackPath);
-            } else {
-                console.log('Unknown dynamic route, redirecting to home');
-                window.location.replace('/');
-            }
+            // Redirect to the fallback page that actually exists
+            var fallbackPath = routeBase + 'next-static-fallback/index.html'; // e.g., /studio-detail/next-static-fallback/index.html
+            console.log('Dynamic route detected, redirecting to fallback:', fallbackPath);
+            window.location.replace(fallbackPath);
         } else {
-            // For static pages, just redirect to home
+            // For static pages, redirect to home
             console.log('Static page 404, redirecting to home');
-            window.location.replace('/');
+            setTimeout(function() {
+                window.location.replace('/');
+            }, 1000);
         }
     </script>
 </body>
