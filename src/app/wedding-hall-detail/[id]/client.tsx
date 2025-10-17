@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { useDynamicParams } from "next-static-utils";
 import { weddingHallService } from "@/services/api";
 import { ImageGallery } from "../../components/ImageGallery";
 import Link from "next/link";
@@ -127,12 +126,18 @@ interface WeddingHallDetail {
 }
 
 export function WeddingHallDetailClient() {
-  // Use different hooks based on environment
   const params = useParams();
-  const dynamicParams = useDynamicParams();
   
-  // In development, use Next.js params, in production use next-static-utils
-  const id = (params?.id as string) || dynamicParams?.id;
+  const getIdFromUrl = () => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      const match = path.match(/\/wedding-hall-detail\/([^\/]+)/);
+      return match ? match[1] : null;
+    }
+    return null;
+  };
+  
+  const id = (params?.id as string) || getIdFromUrl();
   const [hall, setHall] = useState<WeddingHallDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

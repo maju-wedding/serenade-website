@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useDynamicParams } from "next-static-utils";
 import { magazineService } from "@/services/api";
 import Image from "next/image";
 import { Header } from "../../components/Header";
@@ -18,13 +17,19 @@ interface Magazine {
 }
 
 export function MagazineDetailClient() {
-  // Use different hooks based on environment
   const params = useParams();
-  const dynamicParams = useDynamicParams();
   const router = useRouter();
   
-  // In development, use Next.js params, in production use next-static-utils
-  const id = (params?.id as string) || dynamicParams?.id;
+  const getIdFromUrl = () => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      const match = path.match(/\/magazine-detail\/([^\/]+)/);
+      return match ? match[1] : null;
+    }
+    return null;
+  };
+  
+  const id = (params?.id as string) || getIdFromUrl();
   
   const [magazine, setMagazine] = useState<Magazine | null>(null);
   const [loading, setLoading] = useState(true);

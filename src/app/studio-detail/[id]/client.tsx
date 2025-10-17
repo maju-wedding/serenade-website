@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { useDynamicParams } from "next-static-utils";
 import { studioService } from "@/services/api";
 import Link from "next/link";
 import { Header } from "../../components/Header";
@@ -118,10 +117,19 @@ interface StudioDetail {
 export function StudioDetailClient() {
   // Use different hooks based on environment
   const params = useParams();
-  const dynamicParams = useDynamicParams();
   
-  // In development, use Next.js params, in production use next-static-utils
-  const id = (params?.id as string) || dynamicParams?.id;
+  // Extract ID from URL directly for static sites
+  const getIdFromUrl = () => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      const match = path.match(/\/studio-detail\/([^\/]+)/);
+      return match ? match[1] : null;
+    }
+    return null;
+  };
+  
+  // In development, use Next.js params, in production extract from URL
+  const id = (params?.id as string) || getIdFromUrl();
   const [studio, setStudio] = useState<StudioDetail | null>(null);
   const [packages, setPackages] = useState<StudioPackage[]>([]);
   const [loading, setLoading] = useState(true);

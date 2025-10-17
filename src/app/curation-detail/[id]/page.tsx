@@ -1,10 +1,9 @@
 import { Suspense } from "react";
-import { withDynamicParams } from "next-static-utils";
 import { Header } from "../../components/Header";
 import { Footer } from "../../components/Footer";
 import { CurationDetailClient } from "./client";
 
-export const generateStaticParams = withDynamicParams();
+export const generateStaticParams = () => [];
 
 export default function CurationDetailPage() {
   return (

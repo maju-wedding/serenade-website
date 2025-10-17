@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { useDynamicParams } from "next-static-utils";
 import { curationService } from "@/services/api";
 import Image from "next/image";
 import Link from "next/link";
@@ -40,12 +39,18 @@ interface Curation {
 }
 
 export function CurationDetailClient() {
-  // Use different hooks based on environment
   const params = useParams();
-  const dynamicParams = useDynamicParams();
   
-  // In development, use Next.js params, in production use next-static-utils
-  const curationId = (params?.id as string) || dynamicParams?.id;
+  const getIdFromUrl = () => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      const match = path.match(/\/curation-detail\/([^\/]+)/);
+      return match ? match[1] : null;
+    }
+    return null;
+  };
+  
+  const curationId = (params?.id as string) || getIdFromUrl();
   const [curation, setCuration] = useState<Curation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
