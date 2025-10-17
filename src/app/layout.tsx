@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import Script from "next/script";
-import { ClientRouter } from "@/components/ClientRouter";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -106,7 +105,6 @@ export default function RootLayout({
         <link rel="canonical" href="https://serenade-wedding.com" />
       </head>
       <body className={`font-sans antialiased ${poppins.variable}`}>
-        <ClientRouter />
         {children}
 
         {/* Google Analytics */}

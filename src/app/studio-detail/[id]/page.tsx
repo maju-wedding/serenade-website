@@ -1,10 +1,9 @@
 import { Suspense } from "react";
+import { withDynamicParams } from "next-static-utils";
 import { Header } from "../../components/Header";
 import { StudioDetailClient } from "./client";
 
-export async function generateStaticParams(): Promise<{ id: string }[]> {
-  return [];
-}
+export const generateStaticParams = withDynamicParams();
 
 export default function StudioDetailPage() {
   return (

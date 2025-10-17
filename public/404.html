@@ -81,10 +81,25 @@
         }
         
         if (isDynamicRoute) {
-            // For dynamic routes, use immediate redirect to home with path in URL
-            var newUrl = '/?path=' + encodeURIComponent(originalPath);
-            console.log('Dynamic route detected, redirecting to:', newUrl);
-            window.location.replace(newUrl);
+            // For dynamic routes, redirect to the appropriate fallback page
+            var fallbackPath = '';
+            if (originalPath.indexOf('/studio-detail/') === 0) {
+                fallbackPath = '/studio-detail/next-static-fallback/';
+            } else if (originalPath.indexOf('/wedding-hall-detail/') === 0) {
+                fallbackPath = '/wedding-hall-detail/next-static-fallback/';
+            } else if (originalPath.indexOf('/magazine-detail/') === 0) {
+                fallbackPath = '/magazine-detail/next-static-fallback/';
+            } else if (originalPath.indexOf('/curation-detail/') === 0) {
+                fallbackPath = '/curation-detail/next-static-fallback/';
+            }
+            
+            if (fallbackPath) {
+                console.log('Dynamic route detected, redirecting to fallback:', fallbackPath);
+                window.location.replace(fallbackPath);
+            } else {
+                console.log('Unknown dynamic route, redirecting to home');
+                window.location.replace('/');
+            }
         } else {
             // For static pages, just redirect to home
             console.log('Static page 404, redirecting to home');

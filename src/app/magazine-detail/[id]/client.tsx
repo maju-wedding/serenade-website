@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useDynamicParams } from "next-static-utils";
 import { magazineService } from "@/services/api";
 import Image from "next/image";
 import { Header } from "../../components/Header";
@@ -17,22 +18,26 @@ interface Magazine {
 }
 
 export function MagazineDetailClient() {
+  // Use different hooks based on environment
   const params = useParams();
+  const dynamicParams = useDynamicParams();
   const router = useRouter();
-  const magazineId = params.id as string;
+  
+  // In development, use Next.js params, in production use next-static-utils
+  const id = (params?.id as string) || dynamicParams?.id;
   
   const [magazine, setMagazine] = useState<Magazine | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (magazineId) {
-      loadMagazine(magazineId);
+    if (id) {
+      loadMagazine(id);
     } else {
       setError("매거진 ID가 없습니다.");
       setLoading(false);
     }
-  }, [magazineId]);
+  }, [id]);
 
   const loadMagazine = async (id: string) => {
     try {
